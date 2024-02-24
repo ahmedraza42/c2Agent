@@ -37,6 +37,7 @@ import NewPaymentMethod from "../screens/NewPaymentMethod";
 import ScratchCardPage from "../screens/ScratchCard";
 import AllProducts from "../screens/AllProducts";
 import SearchScreen from "../screens/SearchScreen";
+import Qrcode from "../screens/Qrcode";
 const DrawerBuyer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -299,9 +300,19 @@ export const BottomTabs = (props) => {
   const [user] = React.useContext(UserContext);
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="Home"
         component={HomeBottomStack}
+        options={{ headerShown: false }}
+      /> */}
+      <HomeStack.Screen
+        name="Homes"
+        component={Home}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Qrcode"
+        component={Qrcode}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
@@ -309,6 +320,7 @@ export const BottomTabs = (props) => {
         component={AllProducts}
         options={{ headerShown: false }}
       />
+      
       <HomeStack.Screen
         name="SearchScreen"
         component={SearchScreen}

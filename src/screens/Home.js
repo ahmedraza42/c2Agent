@@ -18,10 +18,6 @@ import { fontFamily } from "../theme/Fonts";
 import { ModalContext } from "../context/ModalContext";
 import API_CALLS from "../services/constants";
 import { ProfileContext } from "../context/ProfileContext";
-import { UserContext } from "../context/UserContext";
-import moment from "moment";
-import Loader from "../components/Loader";
-import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import { MemoizedProducts } from "../components/MemoizedProducts";
 import SearchInput from "../components/SearchInput";
@@ -42,9 +38,7 @@ const Home = ({ navigation, route }) => {
 
   const callHomeApis = async () => {
     setLoading(true)
-   await getPopularProducts()
-   await getCategories()
-   await getSubCategories()
+  //  await getPopularProducts()
    await getProfile()
     setLoading(false)
   };
@@ -78,32 +72,7 @@ const Home = ({ navigation, route }) => {
     }
   };
 
-  const getCategories = async () => {
-    try {
-     
-      const response = await API_CALLS.categories();
-      if (response.status === true) {
-        setCategories(response.data||[])
-        
-      }
-    } catch (error) {
-      console.log("user profile error", error);
-    }
-  };
-
-  const getSubCategories = async () => {
-    try {
-     
-      const response = await API_CALLS.sub_categories();
-      if (response.status === true) {
-        setSubCategories(response.data||[])
-        console.log('sub categories',response)
-        
-      }
-    } catch (error) {
-      console.log("sub categories error", error);
-    }
-  };
+ 
   const renderItem = ({ item, index }) => {
     return (
       <MemoizedProducts
@@ -136,111 +105,39 @@ const Home = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Header showBackButton={false} navigation={navigation} />
-      <View style={{backgroundColor:colors.primary,paddingHorizontal:moderateScale(15),paddingVertical:moderateScale(10)}}>
-          <SearchInput onFocus={()=>navigation.navigate('SearchScreen')} placeholder={'Search Products'}/>
-          </View>
-      <View style={{ paddingHorizontal: moderateScale(15) }}>
+      <View style={{width:'100%',height:moderateScale(75),   borderRadius: moderateScale(8),
+    padding: moderateScale(4),
+    marginTop:moderateScale(10),
+    backgroundColor: "white",
+    flexDirection:'row',
+    paddingHorizontal:moderateScale(20),
+    shadowColor: "rgba(0, 26, 77, 0.5)",
+							shadowOpacity: 0.1,
+							shadowOffset: {
+							    width: 0,
+							    height: 3
+							},
+							shadowRadius: 5,
+              
+              justifyContent:'space-between',
+              alignItems:'center',
+							elevation: 8,}}>
+              <View style={{flexDirection:'row',alignItems:'center'}}>
+              <Image style={{width:moderateScale(50),backgroundColor:'red',height:moderateScale(50),borderRadius:moderateScale(25)}} source={{uri:'https://media.istockphoto.com/id/1440149723/photo/happy-man-social-media-phone-and-living-room-relax-typing-smartphone-and-online-communication.jpg?s=2048x2048&w=is&k=20&c=CcX1kHlcOLFpb5Mt1zYZMfujEFpn3a6vMvn3eQmwiVA='}}/>
+                <View style={{marginLeft:moderateScale(10)}}>
+                  <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(15)}}>Welcome</Text>
+                  <Text  style={{fontFamily:fontFamily.Medium,color:'rgba(21, 21, 21, 0.4)',fontSize:moderateScale(15)}}>Michael Miranda</Text>
+                </View>
+              </View>
+              </View>
+      <View style={{ paddingHorizontal: moderateScale(2) }}>
         <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
           <View style={styles.top10} />
-          
+        <TouchableOpacity onPress={()=>{navigation.navigate('Qrcode')}}>
+        <Image source={require('../assets/vectors/qrView.png')} resizeMode="contain" style={{height:moderateScale(110),width:'100%'}}/>
+
+        </TouchableOpacity>
          
-          {viewAllRow("AllProducts","Shop by Category")}
-          <View style={{ flexDirection: "row", alignItems: "center",justifyContent:'center' }}>
-            {loading?<ActivityIndicator size={'small'} color={colors.input}/>: <FlatList
-              data={categories}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => {
-                return (
-                  <View
-                    style={{
-                      alignItems: "center",
-                      marginHorizontal: moderateScale(5),
-                    }}
-                  >
-                    <Image
-                      source={{uri:item.image}}
-                      resizeMode="contain"
-                      style={{
-                        width: moderateScale(35),
-                        height: moderateScale(35),
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: fontFamily.SemiBold,
-                        fontSize: moderateScale(10),
-                        textAlign:'center',
-                        marginTop:moderateScale(1)
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  </View>
-                );
-              }}
-            />}
-          </View>
-
-          {/* <View style={styles.top10} />
-          {viewAllRow("AllProducts","Shop by Sub Categories")}
-          <View style={{ flexDirection: "row", alignItems: "center",justifyContent:'center' }}>
-            {loading?<ActivityIndicator size={'small'} color={colors.input}/>: <FlatList
-              data={subCategories}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => {
-                return (
-                  <View
-                    style={{
-                      alignItems: "center",
-                      marginHorizontal: moderateScale(5),
-                    }}
-                  >
-                    <Image
-                      source={{uri:item.image}}
-                      resizeMode="contain"
-                      style={{
-                        width: moderateScale(30),
-                        height: moderateScale(30),
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: fontFamily.SemiBold,
-                        fontSize: moderateScale(10),
-                        textAlign:'center'
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  </View>
-                );
-              }}
-            />}
-          </View> */}
-          <View style={styles.top10} />
-          {viewAllRow("AllProducts","Popular Products")}
-
-         {loading?<ActivityIndicator size={'small'} color={colors.input}/>: <FlatList
-            ref={mainflatListRef}
-            data={product}
-            bounces={false}
-            keyExtractor={(item, index) => index.toString()}
-            initialNumToRender={7}
-            maxToRenderPerBatch={10}
-            removeClippedSubviews={true}
-            renderItem={(item, index) => renderItem(item, index)}
-            numColumns={2}
-            ListEmptyComponent={()=>{
-              return <Text>No Product found</Text>
-            }}
-            ItemSeparatorComponent={() => {
-              return <View style={{ height: moderateScale(5) }} />;
-            }}
-          />}
           <View style={{ height: moderateScale(160) }} />
         </ScrollView>
       </View>

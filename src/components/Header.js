@@ -14,6 +14,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Text from "./Text";
 import { fontFamily } from "../theme/Fonts";
 import colors from "../theme/Colors";
+import { showToast } from "./Toast";
 
 const Header = ({ showBackButton = true, showDrawerButton = true, name ,showNoti=true,navigation }) => {
   // const navigation = useNavigation();
@@ -43,6 +44,7 @@ const Header = ({ showBackButton = true, showDrawerButton = true, name ,showNoti
           <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss();
+              // showToast('Feature under development')
               navigation.openDrawer();
             }}
           >

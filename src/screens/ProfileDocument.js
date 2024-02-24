@@ -50,6 +50,23 @@ const ProfileDocument = ({ navigation, route }) => {
   const [showOcrData, setShowOcrData] = useState(false);
   const [dataFileName, setDataFileName] = useState('');
   const [_, setModal] = useContext(LoaderContext);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageArray, setImageArray] = useState([
+    {
+      uri: "",
+      type: "",
+      base64: "",
+      filename: "",
+      key: "tradeLicense_p1",
+    },
+    {
+      uri: "",
+      type: "",
+      base64: "",
+      filename: "",
+      key: "tradeLicense_p2",
+    },
+  ]);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -153,6 +170,75 @@ console.log(dataFileName)
       handleError(e);
     }
   };
+  const renderImages = (imageArray) => {
+    console.log({ imageArray });
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {imageArray?.map((item, index) => {
+          if (item.uri) {
+            return (
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Text
+                  style={{
+                    fontFamily: fontFamily.Medium,
+                    fontSize: moderateScale(15),
+                    marginBottom: moderateScale(5),
+                  }}
+                >
+                  {index + 1}
+                </Text>
+                <TouchableOpacity
+                  style={styles.profilePicture}
+                  onPress={() => {}}
+                >
+                  {selectedImage(item.uri)}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setTimeout(() => {
+                      toggleModal();
+                    }, 250);
+                  }}
+                  style={styles.cameraIcon}
+                >
+                  {cameraImage()}
+                </TouchableOpacity>
+              </View>
+            );
+          } else {
+            return (
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                
+                <TouchableOpacity
+                style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
+                  onPress={() => {
+                    setSelectedImageIndex(index);
+                    setTimeout(() => {
+                      toggleModal();
+                    }, 250);
+                  }}
+                >
+                  <Image
+                    style={{width:moderateScale(60),height:moderateScale(60)}}
+                    resizeMode="contain"
+                    source={require("../assets/vectors/fileUnselected.png")}
+                  />
+                  <Text style={{marginTop:moderateScale(5),fontSize:moderateScale(15),fontFamily:fontFamily.Medium,color: "rgba(21, 21, 21, 0.4)",}}>Upload</Text>
+                  <Text style={{fontSize:moderateScale(15),fontFamily:fontFamily.Medium,color: "rgba(21, 21, 21, 0.4)",}}>{index==0?'Front Side':'Back Side'}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }
+        })}
+      </View>
+    );
+  };
 
   const cameraImage = () => {
     return (
@@ -186,36 +272,43 @@ console.log(dataFileName)
     );
   };
 
-  const openImagePicker = (type) => {
+  const openImagePicker = () => {
     ImagePicker.openPicker({
       mediaType: "photo",
-      width: 700,
-      height: 700,
+      width: 500,
+      height: 500,
       // cropping: true,
       includeBase64: true,
     }).then((data) => {
-       const fileName = data.path.split("/").pop();
-        setImageTypeTrade(data.mime),
-          setBaseTrade("data:image/jpeg;base64," + data.data);
-        setImageFileNameTrade(fileName), setImageUriTrade(data.path);
-        setIsDocumentTrade(false);
-        sendImage(data.mime,fileName,"data:image/jpeg;base64," + data.data)
+      console.log({ data });
+      const fileName = data.path.split("/").pop();
+      let imageArrayCopy = [...imageArray];
+      imageArrayCopy[selectedImageIndex].uri = data.path;
+      imageArrayCopy[selectedImageIndex].type = data.mime;
+      imageArrayCopy[selectedImageIndex].filename = fileName;
+      imageArrayCopy[selectedImageIndex].base64 =
+        "data:image/jpeg;base64," + data.data;
+      setImageArray(imageArrayCopy);
+      setIsDocument(false);
     });
   };
 
- const takePicture = async () => {
+  takePicture = async () => {
     if (cameraRef?.current) {
       const options = { quality: 0.6, base64: true };
       const data = await cameraRef?.current.takePictureAsync(options);
-     
-        const filname = data.uri.split("/").pop();
-        setImageTypeTrade("image/jpg"),
-          setImageFileNameTrade(filname),
-          setImageUriTrade(data.uri);
-        setBaseTrade("data:image/jpeg;base64," + data.base64);
-        setCamera(false);
-        setIsDocumentTrade(false);
-        sendImage("image/jpg",filname,"data:image/jpeg;base64," + data.base64)
+      console.log(data);
+
+      const fileName = data.uri.split("/").pop();
+      let imageArrayCopy = [...imageArray];
+      imageArrayCopy[selectedImageIndex].uri = data.uri;
+      imageArrayCopy[selectedImageIndex].type = "image/jpg";
+      imageArrayCopy[selectedImageIndex].filename = fileName;
+      imageArrayCopy[selectedImageIndex].base64 =
+        "data:image/jpeg;base64," + data.base64;
+      setImageArray(imageArrayCopy);
+      setCamera(false);
+      setIsDocument(false);
     }
   };
   if (camera) {
@@ -308,7 +401,7 @@ console.log(dataFileName)
               <View style={styles.primaryRound}>
                 <Text style={styles.primaryNumber}>1</Text>
               </View>
-              <Text style={styles.categoryText}>Trade License</Text>
+              <Text style={styles.categoryText}>Emirates ID</Text>
             </View>
 
             <View style={styles.rowCenter}>
@@ -321,7 +414,7 @@ console.log(dataFileName)
                   color: "rgba(21, 21, 21, 0.4)",
                 }}
               >
-                VAT Certificate
+                Driving License
               </Text>
             </View>
 
@@ -335,13 +428,13 @@ console.log(dataFileName)
                   color: "rgba(21, 21, 21, 0.4)",
                 }}
               >
-                Merchant
+                Info    
               </Text>
             </View>
           </View>
           {/* <View style={styles.top10} /> */}
 
-          <Text style={styles.emailPassword}>Trade License</Text>
+          <Text style={styles.emailPassword}>Emirates ID</Text>
           {isDocumenttrade ? (
             <View style={styles.imageRootView}>
               <Image
@@ -359,7 +452,8 @@ console.log(dataFileName)
               </TouchableOpacity>
             </View>
           ) : (
-            rendertrade(imageUriTrade)
+            renderImages(imageArray)
+            // rendertrade(imageUriTrade)
           )}
           <Text style={styles.uploadText}>Upload PDF or picture</Text>
           <View style={styles.top10} />
@@ -456,462 +550,7 @@ console.log(dataFileName)
   );
 };
 
-// const ProfileDocument = ({ navigation, route }) => {
-//   const cameraRef = useRef(null);
-//   const [imageTypeVat, setImageTypeVat] = useState("");
-//   const [baseVat, setBaseVat] = useState(null);
-//   const [imageUriVat, setImageUriVat] = useState("");
-//   const [imageFileNameVat, setImageFileNameVat] = useState("");
 
-//   const [imageTypeTrade, setImageTypeTrade] = useState("");
-//   const [baseTrade, setBaseTrade] = useState(null);
-//   const [imageUriTrade, setImageUriTrade] = useState("");
-//   const [imageFileNameTrade, setImageFileNameTrade] = useState("");
-
-//   const [isModalVisible, setModalVisible] = useState(false);
-//   const [isDocument, setIsDocument] = useState(false);
-//   const [isDocumenttrade, setIsDocumentTrade] = useState(false);
-//   const [btnloading, setBtnloading] = useState(false);
-//   const [camera, setCamera] = useState(false);
-//   const [selectedType, setSelectedType] = useState("");
-//   const toggleModal = () => {
-//     setModalVisible(!isModalVisible);
-//   };
-//   useEffect(()=>{
-//     let showCompleteProfile =  getItemFromStorage(
-//       "showCompleteProfile"
-//     );
-//     console.log({showCompleteProfile})
-//   },[])
-
-//   const sendImage = async (type, filename, uri, key) => {
-//     if (imageUriTrade == "") {
-//       showToast("Trade License is required");
-//     } 
-//     else if(imageUriVat == ""){
-//       showToast("VAT Certificate is required");
-//     }
-//     else{
-//       setBtnloading(true);
-//       var dataa = new FormData();
-//       dataa.append("trade_license", {
-//         uri: imageUriTrade,
-//         type: imageTypeTrade,
-//         name: imageFileNameTrade,
-//       });
-//       dataa.append("vat_certificate", {
-//         uri: imageUriVat,
-//         type: imageTypeVat,
-//         name: imageFileNameVat,
-//       });
-  
-//       console.log(dataa);
-//       let data = dataa;
-//       try {
-//         const res = await API_CALLS.ocr(data);
-//         console.log({ res });
-//         if (res.status == true) {
-//           showToast("Uploaded");
-//           navigation.navigate("ProfileContact",{item:res.data});
-//           setBtnloading(false);
-//           // navigation.navigate("ProfileVatLicense");
-//         } else {
-//           console.log("response", res);
-//           throw res;
-//         }
-//       } catch (error) {
-//         console.log("trade error", error);
-//         showToast(error?.message||"Please try again");
-//       }
-//     }
- 
-//     setBtnloading(false);
-//   };
-
-//   const handleError = (err) => {
-//     if (isCancel(err)) {
-//       console.log("cancelled");
-//       // User cancelled the picker, exit any dialogs or menus and move on
-//     } else if (isInProgress(err)) {
-//       console.log(
-//         "multiple pickers were opened, only the last will be considered"
-//       );
-//     } else {
-//       console.log(err);
-//     }
-//   };
-
-//   const openDocument = async () => {
-//     try {
-//       const data = await DocumentPicker.pickSingle({
-//         presentationStyle: "fullScreen",
-//         copyTo: "cachesDirectory",
-//         type: [DocumentPicker.types.pdf],
-        
-//       });
-//       if (selectedType === "vat") {
-//         setImageTypeVat(data.type),
-//           setImageFileNameVat(data.name),
-//           setImageUriVat(data.uri);
-//         setBaseVat(null);
-//         setIsDocument(true);
-//       } else {
-//         setImageTypeTrade(data.type),
-//           setImageFileNameTrade(data.name),
-//           setImageUriTrade(data.uri);
-//         setBaseTrade(null);
-//         setIsDocumentTrade(true);
-//       }
-//     } catch (e) {
-//       handleError(e);
-//     }
-//   };
-
-//   const cameraImage = () => {
-//     return (
-//       <Image
-//         style={{ width: moderateScale(25), height: moderateScale(25) }}
-//         resizeMode="contain"
-//         source={require("../assets/vectors/CameraPlus.png")}
-//       />
-//     );
-//   };
-
-//   const selectedImage = (uri) => {
-//     return (
-//       <View>
-//         <Image
-//           source={{ uri: uri }}
-//           style={{ ...styles.image, backgroundColor: "grey" }}
-//           resizeMode={"cover"}
-//         />
-//         <TouchableOpacity
-//           onPress={() => {
-//             setTimeout(() => {
-//               toggleModal();
-//             }, 250);
-//           }}
-//           style={styles.cameraIcon}
-//         >
-//           {cameraImage()}
-//         </TouchableOpacity>
-//       </View>
-//     );
-//   };
-
-//   const openImagePicker = (type) => {
-//     ImagePicker.openPicker({
-//       mediaType: "photo",
-//       width: 700,
-//       height: 700,
-//       // cropping: true,
-//       includeBase64: true,
-//     }).then((data) => {
-//       if (selectedType === "vat") {
-//         const fileName = data.path.split("/").pop();
-//         setImageTypeVat(data.mime),
-//           setBaseVat("data:image/jpeg;base64," + data.data);
-//         setImageFileNameVat(fileName), setImageUriVat(data.path);
-//         setIsDocument(false);
-//       } else {
-//         const fileName = data.path.split("/").pop();
-//         setImageTypeTrade(data.mime),
-//           setBaseTrade("data:image/jpeg;base64," + data.data);
-//         setImageFileNameTrade(fileName), setImageUriTrade(data.path);
-//         setIsDocumentTrade(false);
-//       }
-//     });
-//   };
-
-//  const takePicture = async () => {
-//     if (cameraRef?.current) {
-//       const options = { quality: 0.6, base64: true };
-//       const data = await cameraRef?.current.takePictureAsync(options);
-//       if (selectedType === "vat") {
-//         const filname = data.uri.split("/").pop();
-//         setImageTypeVat("image/jpg"),
-//           setImageFileNameVat(filname),
-//           setImageUriVat(data.uri);
-//         setIsDocument(false);
-//         setBaseVat("data:image/jpeg;base64," + data.base64);
-//         setCamera(false);
-//         setIsDocument(false);
-//       } else {
-//         const filname = data.uri.split("/").pop();
-//         setImageTypeTrade("image/jpg"),
-//           setImageFileNameTrade(filname),
-//           setImageUriTrade(data.uri);
-//         setBaseTrade("data:image/jpeg;base64," + data.base64);
-//         setCamera(false);
-//         setIsDocumentTrade(false);
-//       }
-//     }
-//   };
-//   if (camera) {
-//     return (
-//       <MyCamera
-//         cameraRef={cameraRef}
-//         takePicture={() => takePicture()}
-//         onClose={() => setCamera(false)}
-//         type="square"
-//       />
-//     );
-//   }
-
-//   const renderVat = (imageUriFront) => {
-//     return imageUriFront ? (
-//       <View style={{ alignItems: "center" }}>
-//         {selectedImage(imageUriFront)}
-//       </View>
-//     ) : (
-//       <TouchableOpacity
-//         onPress={() => {
-//           setSelectedType("vat");
-//           setTimeout(() => {
-//             toggleModal();
-//           }, 250);
-//         }}
-//         style={styles.imageRootView}
-//       >
-//         <Image
-//           source={require("../assets/vectors/fileUnselected.png")}
-//           style={{ width: moderateScale(45), height: moderateScale(70) }}
-//           resizeMode="contain"
-//         />
-//         <Text
-//           style={{
-//             fontFamily: fontFamily.Medium,
-//             fontSize: moderateScale(15),
-//             color: colors.lightText,
-//           }}
-//         >
-//           Upload
-//         </Text>
-//       </TouchableOpacity>
-//     );
-//   };
-
-//   const rendertrade = (imageUriFront) => {
-//     return imageUriFront ? (
-//       <View style={{ alignItems: "center" }}>
-//         {selectedImage(imageUriFront)}
-//       </View>
-//     ) : (
-//       <TouchableOpacity
-//         onPress={() => {
-//           setSelectedType("trade");
-//           setTimeout(() => {
-//             toggleModal();
-//           }, 250);
-//         }}
-//         style={styles.imageRootView}
-//       >
-//         <Image
-//           source={require("../assets/vectors/fileUnselected.png")}
-//           style={{ width: moderateScale(45), height: moderateScale(70) }}
-//           resizeMode="contain"
-//         />
-//         <Text
-//           style={{
-//             fontFamily: fontFamily.Medium,
-//             fontSize: moderateScale(15),
-//             color: colors.lightText,
-//           }}
-//         >
-//           Upload
-//         </Text>
-//       </TouchableOpacity>
-//     );
-//   };
-//   const removeVAT = () => {
-//     setImageTypeVat(""), setImageFileNameVat(""), setImageUriVat("");
-//     setIsDocument(false);
-//   };
-
-//   const removeTrade = () => {
-//     setImageTypeTrade(""), setImageFileNameTrade(""), setImageUriTrade("");
-//     setIsDocumentTrade(false);
-//   };
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.iconView}>
-//         <Image
-//           source={require("../assets/icons/loginIcon.png")}
-//           style={styles.icon}
-//           resizeMode="contain"
-//         />
-//       </View>
-//       <View style={styles.container2}>
-//         <ScrollView
-//           showsVerticalScrollIndicator={false}
-//           automaticallyAdjustKeyboardInsets={true}
-//           style={{ flex: 1 }}
-//         >
-//           <Text style={styles.heading}>COMPLETE YOUR PROFILE</Text>
-
-//           <View
-//             style={styles.rowTopView}
-//           >
-//             <View style={styles.rowCenter}>
-//               <View style={styles.primaryRound}>
-//                 <Text style={styles.primaryNumber}>1</Text>
-//               </View>
-//               <Text style={styles.categoryText}>Document</Text>
-//             </View>
-
-//             <View style={styles.rowCenter}>
-//               <View style={styles.greyRound}>
-//                 <Text style={styles.greyNumber}>2</Text>
-//               </View>
-//               <Text
-//                 style={{
-//                   ...styles.categoryText,
-//                   color: "rgba(21, 21, 21, 0.4)",
-//                 }}
-//               >
-//                 Contact Details
-//               </Text>
-//             </View>
-
-//             <View style={styles.rowCenter}>
-//               <View style={styles.greyRound}>
-//                 <Text style={styles.greyNumber}>3</Text>
-//               </View>
-//               <Text
-//                 style={{
-//                   ...styles.categoryText,
-//                   color: "rgba(21, 21, 21, 0.4)",
-//                 }}
-//               >
-//                 Merchant
-//               </Text>
-//             </View>
-//           </View>
-//           <View style={styles.top10} />
-
-//           <Text style={styles.emailPassword}>VAT Certificate</Text>
-
-//           {isDocument ? (
-//             <TouchableOpacity style={styles.imageRootView}>
-//               <Image
-//                 source={require("../assets/vectors/file.png")}
-//                 style={{ width: moderateScale(45), height: moderateScale(70) }}
-//                 resizeMode="contain"
-//               />
-//               <Text style={styles.filename}>{imageFileNameVat}</Text>
-//               <TouchableOpacity
-//                 onPress={() => {
-//                   removeVAT();
-//                 }}
-//               >
-//                 <Text style={styles.removeText}>Remove</Text>
-//               </TouchableOpacity>
-//             </TouchableOpacity>
-//           ) : (
-//             renderVat(imageUriVat)
-//           )}
-//           <Text style={styles.uploadText}>Upload PDF or picture</Text>
-
-//           <View style={styles.top10} />
-//           <Text style={styles.emailPassword}>Trade License</Text>
-//           {isDocumenttrade ? (
-//             <TouchableOpacity style={styles.imageRootView}>
-//               <Image
-//                 source={require("../assets/vectors/file.png")}
-//                 style={{ width: moderateScale(45), height: moderateScale(70) }}
-//                 resizeMode="contain"
-//               />
-//               <Text style={styles.filename}>{imageFileNameTrade}</Text>
-//               <TouchableOpacity
-//                 onPress={() => {
-//                   removeTrade();
-//                 }}
-//               >
-//                 <Text style={styles.removeText}>Remove</Text>
-//               </TouchableOpacity>
-//             </TouchableOpacity>
-//           ) : (
-//             rendertrade(imageUriTrade)
-//           )}
-//           <Text style={styles.uploadText}>Upload PDF or picture</Text>
-//           <View style={styles.top10} />
-//           <Button
-//             loading={btnloading}
-//             text={"NEXT"}
-//             onPress={() => {
-//               sendImage()
-//             }}
-//           />
-//         </ScrollView>
-//       </View>
-//       <Modal
-//         animationIn={"fadeIn"}
-//         isVisible={isModalVisible}
-//         animationInTiming={300}
-//         onBackdropPress={() => toggleModal()}
-//         backdropOpacity={0.3}
-//       >
-//         <View
-//           style={styles.modalInnerView}
-//         >
-//           <Text
-//             style={styles.headingChooseAnAction}
-//           >
-//             Choose an action
-//           </Text>
-
-//           <TouchableOpacity
-//             onPress={() => {
-//               toggleModal(), openDocument();
-//             }}
-//             style={{ paddingVertical: moderateScale(5) }}
-//           >
-//             <Text
-//               style={styles.modalText}
-//             >
-//               Upload Document
-//             </Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity
-//             onPress={() => {
-//               toggleModal(), openImagePicker();
-//             }}
-//             style={{ paddingVertical: moderateScale(5) }}
-//           >
-//             <Text
-//                style={styles.modalText}
-//             >
-//               Pick from Gallery
-//             </Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity
-//             onPress={() => {
-//               toggleModal(), setCamera(true);
-//             }}
-//             style={{ paddingVertical: moderateScale(5) }}
-//           >
-//             <Text
-//               style={styles.modalText}
-//             >
-//               Take a Photo
-//             </Text>
-//           </TouchableOpacity>
-
-//           <TouchableOpacity
-//             onPress={() => toggleModal()}
-//             style={styles.cancelButton}
-//           >
-//             <Text
-//               style={styles.cancelText}
-//             >
-//               Cancel
-//             </Text>
-//           </TouchableOpacity>
-//         </View>
-//       </Modal>
-//     </View>
-//   );
-// };
 
 export default ProfileDocument;
 
@@ -1000,8 +639,8 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   image: {
-    height: moderateScale(100),
-    width: moderateScale(100),
+    // height: moderateScale(100),
+    // width: moderateScale(100),
     borderRadius: moderateScale(20),
   },
   cameraIcon: {

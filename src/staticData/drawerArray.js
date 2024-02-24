@@ -11,12 +11,6 @@ export const mentorDrawerMenuList = [
     // image: require("../assets/vectors/HouseLine.png"),
     route: "Dashboard",
   },
-
-  // {
-  //   title: "Advance Booking Request",
-  //   image: require("../assets/vectors/Advancebookings.png"),
-  //   route: "MentorAdvanceStackScreen",
-  // },
   {
     title: "Pricing",
     // image: require("../assets/vectors/pricing.png"),
@@ -62,31 +56,31 @@ export const mentorDrawerMenuList = [
 ];
 
 export const drawerBuyerList = [
-  {
-    title: "My Profile",
-    image: require("../assets/drawerBuyerAssets/profile.png"),
-    route: "BottomTabsForMantee",
-  },
-  {
-    title: "Past Orders",
-    image: require("../assets/drawerBuyerAssets/pastorders.png"),
-    route: "OrderStackScreen",
-  },
-  {
-    title: "My Payment Methods",
-    image: require("../assets/drawerBuyerAssets/pastorders.png"),
-    route: "PaymentStackScreen",
-  },
-  {
-    title: "My Addresses",
-    image: require("../assets/drawerBuyerAssets/address.png"),
-    route: "ShippingAddress",
-  },
-  {
-    title: "Scratch Card",
-    image: require("../assets/drawerBuyerAssets/address.png"),
-    route: "ScratchCardPage",
-  },
+  // {
+  //   title: "My Profile",
+  //   image: require("../assets/drawerBuyerAssets/profile.png"),
+  //   route: "BottomTabsForMantee",
+  // },
+  // {
+  //   title: "Past Orders",
+  //   image: require("../assets/drawerBuyerAssets/pastorders.png"),
+  //   route: "OrderStackScreen",
+  // },
+  // {
+  //   title: "My Payment Methods",
+  //   image: require("../assets/drawerBuyerAssets/pastorders.png"),
+  //   route: "PaymentStackScreen",
+  // },
+  // {
+  //   title: "My Addresses",
+  //   image: require("../assets/drawerBuyerAssets/address.png"),
+  //   route: "ShippingAddress",
+  // },
+  // {
+  //   title: "Scratch Card",
+  //   image: require("../assets/drawerBuyerAssets/address.png"),
+  //   route: "ScratchCardPage",
+  // },
   {
     title: "Contact Us",
     image: require("../assets/drawerBuyerAssets/contactus.png"),
