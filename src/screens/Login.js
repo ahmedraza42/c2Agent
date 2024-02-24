@@ -60,14 +60,6 @@ const Login = ({ navigation, route }) => {
 
   const handleLogin = async () => {
     Keyboard.dismiss();
-   saveItemToStorage("showCompleteProfile", "true");
-        setUser((state) => ({
-          ...state,
-          isLoggedIn: true,
-          isUserFirstTime: false,
-          showCompleteProfile: true,
-        }));
-        return
     if (email.trim() === "") {
       showToast("Email is required");
       return;
