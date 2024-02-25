@@ -95,14 +95,14 @@ const Login = ({ navigation, route }) => {
         await _tokenStorageService.setRefreshToken(
           response?.data?.refreshToken
         );
-        // saveItemToStorage("showCompleteProfile", "true");
-        // setUser((state) => ({
-        //   ...state,
-        //   isLoggedIn: true,
-        //   isUserFirstTime: false,
-        //   showCompleteProfile: true,
-        // }));
-        // return
+        saveItemToStorage("showCompleteProfile", "true");
+        setUser((state) => ({
+          ...state,
+          isLoggedIn: true,
+          isUserFirstTime: false,
+          showCompleteProfile: true,
+        }));
+        return
         await checkUserfillAllRequiredDoc(response);
         setLoading(false);
       } else {

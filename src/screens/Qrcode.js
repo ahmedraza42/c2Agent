@@ -1,5 +1,5 @@
-import React from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import Text from "../components/Text";
 import colors from "../theme/Colors";
 import { fontFamily } from "../theme/Fonts";
@@ -7,7 +7,23 @@ import { moderateScale } from "react-native-size-matters";
 import API_CALLS from "../services/constants";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Button from "../components/Button";
+import { getItemFromStorage } from "../utils/storage";
+import { SvgUri } from 'react-native-svg';
 const Qrcode = ({ navigation }) => {
+
+  const [qr, setQr] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getDataFromAsync()
+  }, []);
+
+  const getDataFromAsync=async()=>{
+    const res= await getItemFromStorage('qrcode')
+    console.log({res})
+    setQr(res)
+    setLoading(false)
+  }
   const renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -33,17 +49,29 @@ const Qrcode = ({ navigation }) => {
       </View>
     );
   };
+ if(loading){
+  return(
+  <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+  <ActivityIndicator size={'small'} color={colors.input}/>
+
+  </View>
+ )}
   return (
     <View style={styles.container}>
       {renderHeader()}
       <View
         style={styles.innerContainer}
       >
-        <Image
-          resizeMode="contain"
-          source={require("../assets/vectors/qr.png")}
+        {/* <Image
+          resizeMode="cover"
+          source={{uri:qr}}
           style={{ width: moderateScale(350), height: moderateScale(250) }}
-        />
+        /> */}
+         <SvgUri
+    width={moderateScale(320)}
+    height={moderateScale(250)}
+    uri={qr}
+  />
       </View>
       <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingHorizontal:moderateScale(15)}}>
 <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16)}}>Share QR Code</Text>

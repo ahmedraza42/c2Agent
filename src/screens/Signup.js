@@ -133,6 +133,8 @@ const Signup = ({ navigation, route }) => {
       console.log({ signupData });
       if (signupData.status == true) {
         showToast('Signup Successful')
+        console.log('response.data.path',signupData.data.path)
+        await saveItemToStorage("qrcode", signupData.data.path);
         navigation.navigate("Login");
       }
     } catch (error) {

@@ -58,7 +58,7 @@ const DrawerContentForBuyer=({})=> {
                 source={require('../assets/drawerBuyerAssets/profileCircle.png')}
               />}
                 <Text style={styles.firstName}>
-                  {!isEmpty(userProfile)? userProfile?.company:'---'}
+                  {!isEmpty(userProfile)? userProfile?.name:'---'}
                 </Text>
                 <TouchableOpacity onPress={() => {navigation.navigate('Profile')}}>
                   <Text style={styles.email}>Edit Profile</Text>
