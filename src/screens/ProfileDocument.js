@@ -73,14 +73,10 @@ const ProfileDocument = ({ navigation, route }) => {
   useEffect(()=>{
    
   },[])
-console.log(dataFileName)
   const sendImage = async (type, filename, uri, key) => {
     if (uri == "") {
       showToast("Trade License is required");
     } 
-    // else if(imageUriVat == ""){
-    //   showToast("VAT Certificate is required");
-    // }
     else{
       // setBtnloading(true);
       setModal((state) => ({
@@ -94,11 +90,6 @@ console.log(dataFileName)
         type: type,
         name: filename,
       });
-      // dataa.append("vat_certificate", {
-      //   uri: imageUriVat,
-      //   type: imageTypeVat,
-      //   name: imageFileNameVat,
-      // });
   
       console.log(dataa);
       let data = dataa;
@@ -184,22 +175,14 @@ console.log(dataFileName)
           if (item.uri) {
             return (
               <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Text
-                  style={{
-                    fontFamily: fontFamily.Medium,
-                    fontSize: moderateScale(15),
-                    marginBottom: moderateScale(5),
-                  }}
-                >
-                  {index + 1}
-                </Text>
+                
                 <TouchableOpacity
-                  style={styles.profilePicture}
+                  style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
                   onPress={() => {}}
                 >
                   {selectedImage(item.uri)}
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     setTimeout(() => {
                       toggleModal();
@@ -208,7 +191,7 @@ console.log(dataFileName)
                   style={styles.cameraIcon}
                 >
                   {cameraImage()}
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             );
           } else {
@@ -250,25 +233,51 @@ console.log(dataFileName)
     );
   };
 
+  const sendImageFrontToBackend=async(base,uri,file,type)=>{
+    let data =JSON.stringify(base)
+    try {
+      setModal((state) => ({
+        ...state,
+        heading: "Processing, Please wait",
+        visible: true,
+        }));
+      const res =await API_CALLS.emiratesFront(data)
+      console.log({res})
+      let imageArrayCopy = [...imageArray];
+      imageArrayCopy[selectedImageIndex].uri = uri;
+      imageArrayCopy[selectedImageIndex].type = type;
+      imageArrayCopy[selectedImageIndex].filename = file;
+      imageArrayCopy[selectedImageIndex].base64 =
+        "data:image/jpeg;base64," + base;
+      setImageArray(imageArrayCopy);
+      setIsDocument(false);
+    } catch (error) {
+      console.log('sendImageFrontToBackend',error)
+    }finally{
+      setModal((state) => ({
+        ...state,
+        heading: "Processing, Please wait",
+        visible: false,
+        }));
+    }
+   
+  }
   const selectedImage = (uri) => {
+    console.log({uri})
     return (
-      <View>
+      <TouchableOpacity
+      onPress={() => {
+            setTimeout(() => {
+              toggleModal();
+            }, 250);
+          }}>
         <Image
           source={{ uri: uri }}
           style={{ ...styles.image, backgroundColor: "grey" }}
           resizeMode={"cover"}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setTimeout(() => {
-              toggleModal();
-            }, 250);
-          }}
-          style={styles.cameraIcon}
-        >
-          {cameraImage()}
-        </TouchableOpacity>
-      </View>
+        
+      </TouchableOpacity>
     );
   };
 
@@ -281,15 +290,12 @@ console.log(dataFileName)
       includeBase64: true,
     }).then((data) => {
       console.log({ data });
-      const fileName = data.path.split("/").pop();
-      let imageArrayCopy = [...imageArray];
-      imageArrayCopy[selectedImageIndex].uri = data.path;
-      imageArrayCopy[selectedImageIndex].type = data.mime;
-      imageArrayCopy[selectedImageIndex].filename = fileName;
-      imageArrayCopy[selectedImageIndex].base64 =
-        "data:image/jpeg;base64," + data.data;
-      setImageArray(imageArrayCopy);
-      setIsDocument(false);
+      if(selectedImageIndex==0){
+        const fileName = data.path.split("/").pop();
+        sendImageFrontToBackend(data.data,data.path,fileName,data.mime)
+      }
+      // 
+     
     });
   };
 
@@ -317,44 +323,10 @@ console.log(dataFileName)
         cameraRef={cameraRef}
         takePicture={() => takePicture()}
         onClose={() => setCamera(false)}
-        type="square"
+        type="idcard"
       />
     );
   }
-
-  const rendertrade = (imageUriFront) => {
-    return imageUriFront ? (
-      <View style={{ alignItems: "center" }}>
-        {selectedImage(imageUriFront)}
-      </View>
-    ) : (
-      <TouchableOpacity
-        onPress={() => {
-          setSelectedType("trade");
-          setTimeout(() => {
-            toggleModal();
-          }, 250);
-        }}
-        style={styles.imageRootView}
-      >
-        <Image
-          source={require("../assets/vectors/fileUnselected.png")}
-          style={{ width: moderateScale(45), height: moderateScale(70) }}
-          resizeMode="contain"
-        />
-        <Text
-          style={{
-            fontFamily: fontFamily.Medium,
-            fontSize: moderateScale(15),
-            color: colors.lightText,
-          }}
-        >
-          Upload
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
 
   const removeTrade = () => {
     setImageTypeTrade(""), setImageFileNameTrade(""), setImageUriTrade("");
@@ -497,7 +469,7 @@ console.log(dataFileName)
             Choose an action
           </Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               toggleModal(), openDocument();
             }}
@@ -508,7 +480,7 @@ console.log(dataFileName)
             >
               Upload Document
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => {
               toggleModal(), openImagePicker();
@@ -569,7 +541,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.SemiBold,
     color: colors.black,
     fontSize: moderateScale(14),
-    marginBottom: moderateScale(4),
+    marginBottom: moderateScale(10),
     marginLeft: moderateScale(4),
   },
   forgetPassword: {
@@ -639,8 +611,8 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   image: {
-    // height: moderateScale(100),
-    // width: moderateScale(100),
+    height: moderateScale(130),
+    width: moderateScale(130),
     borderRadius: moderateScale(20),
   },
   cameraIcon: {

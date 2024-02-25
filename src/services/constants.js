@@ -13,6 +13,7 @@ export const API_URLS = {
   login: `${BASE_URL}/login`,
   signup: `${BASE_URL}/register`,
   ocr: `${BASE_URL}/ocr`,
+  emiratesFront: `https://8k4zyqfesl.execute-api.us-east-1.amazonaws.com/Prod`,
   getUserProfile: `${BASE_URL}/account/get-profile`,
   getProfile: `${BASE_URL}/user-details`,
 
@@ -36,6 +37,7 @@ export const API_URLS = {
 const login = (data) => post(API_URLS.login, data);
 const signup = (data) => post(API_URLS.signup, data);
 const ocr = (data) => post(API_URLS.ocr, data);
+const emiratesFront = (data) => post(API_URLS.emiratesFront, data);
 const forgetPass = (data) => post(API_URLS.forgetPass, data);
 const verifyOtp = (data) => post(API_URLS.verifyOtp, data);
 const resetPass = (data) => post(API_URLS.resetPass, data);
@@ -56,6 +58,7 @@ const API_CALLS = {
   login,
   signup,
   ocr,
+  emiratesFront,
   forgetPass,
   verifyOtp,
   resetPass,

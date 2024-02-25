@@ -16,13 +16,10 @@ import { saveItemToStorage } from "../utils/storage";
 import { UserContext } from "../context/UserContext";
 
 const walkThrough = [
-  { id: 1, text:'Food, Personal Care And Home Care Products - All In One Place' ,image:require('../assets/walkthrough/1.png'),innerImage:require('../assets/walkthrough/img1.png')},
-  { id: 2, text:'Purchase All Your Stock From One Platform' ,image:require('../assets/walkthrough/2.png'),innerImage:require('../assets/walkthrough/img2.png')},
-  { id: 3, text:'Schedule Future Deliveries And Get Discounts' ,image:require('../assets/walkthrough/3.png'),innerImage:require('../assets/walkthrough/img3.png')},
-  { id: 4, text:'Buy More And Get Loyalty Rewards',image:require('../assets/walkthrough/4.png'),innerImage:require('../assets/walkthrough/img4.png')},
-  { id: 5, text:'Daily Scratch Card To Win Rewards And Participate In Monthly Grand Prize',image:require('../assets/walkthrough/5.png'),innerImage:require('../assets/walkthrough/img5.png')},
-  { id: 6, text:"Daily Draw, Find Out If It’s You. No Limit On Cart Value! Buy More, Win More",image:require('../assets/walkthrough/6.png'),innerImage:require('../assets/walkthrough/img6.png')},
-];
+  { id: 1, text:'Onboard merchants, generate sales, promote products… get started today' ,image:require('../assets/walkthrough/1.png'),innerImage:require('../assets/walkthrough/img1.png')},
+  { id: 2, text:'Flexible working hours, work in your territory, make money daily, get paid weekly… so much more' ,image:require('../assets/walkthrough/2.png'),innerImage:require('../assets/walkthrough/img2.png')},
+  { id: 3, text:'Upload your identification documents, driving license and start today' ,image:require('../assets/walkthrough/3.png'),innerImage:require('../assets/walkthrough/img3.png')},
+ ];
 
 const WalkThrough = () => {
   const swiper = useRef(null)
@@ -86,7 +83,7 @@ const WalkThrough = () => {
             <TouchableOpacity
         onPress={() => {
           console.log(index)
-          if(index<5){
+          if(index<2){
             swiper?.current?.scrollBy(1)
           }
           else{

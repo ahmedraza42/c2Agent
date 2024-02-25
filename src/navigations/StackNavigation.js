@@ -402,11 +402,11 @@ export const AuthStackScreen = () => {
 export const ProfileStacks = () => {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen
+      {/* <ProfileStack.Screen
         name="ProfileDocument"
         component={ProfileDocument}
         options={{ headerShown: false }}
-      />
+      /> */}
       <ProfileStack.Screen
         name="ProfileContact"
         component={ProfileContact}

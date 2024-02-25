@@ -31,9 +31,14 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SelectDropdown from "react-native-select-dropdown";
 // AIzaSyBTDy36qLgX3Ff6ubBMpWI9TcFoOkFDzhw
 const Signup = ({ navigation, route }) => {
+  const phoneInput = useRef(null);
   const [password, setPassword] = useState("CF!janamercer297");
   const [email, setEmail] = useState("test21@test.com");
   const [loading, setLoading] = useState(false);
+  const [formattedValue, setFormattedValue] = useState("");
+  const [countryCode, setCountryCode] = useState("AE");
+  const [phoneCode, setPhoneCode] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
     Geocoder.init("AIzaSyDipHIchD79mO4LM_C_54Hu9LkAfjVscUs");
@@ -80,7 +85,13 @@ const Signup = ({ navigation, route }) => {
     // return
     Keyboard.dismiss();
     var validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+    if (phoneInput?.current) {
+      const checkValid = phoneInput.current?.isValidNumber(formattedValue);
+      if (!checkValid) {
+        showToast("Invalid Phone Number");
+        return;
+      }
+    }
     // if (accountName.trim() === "") {
     //   showToast("Account Name is required");
     //   return;
@@ -92,10 +103,7 @@ const Signup = ({ navigation, route }) => {
     //   showToast("Phone number is required");
     //   return;
     // }
-    if (email.trim() === "") {
-      showToast("Email is required");
-      return;
-    } 
+    
     else if (password.trim() === "") {
       showToast("Password is required");
       return;
@@ -104,9 +112,8 @@ const Signup = ({ navigation, route }) => {
       showToast('Must contain atleast one number , uppercase and lowercase letter and 8 characters long');
       return;
     }
-     else {
       doSIgnup();
-    }
+    
   };
 
   const doSIgnup = async (type) => {
@@ -115,10 +122,12 @@ const Signup = ({ navigation, route }) => {
       remove("mentee");
       remove("showCompleteProfile");
       let randomDevicesId = GenerateRandomNumberForDeviceID();
+      console.log({formattedValue})
       setLoading(true);
       const data = {
-        email: email,
+        phone_number: formattedValue,
         password: password,
+        "type" : "seller"
       };
       const signupData = await API_CALLS.signup(data);
       console.log({ signupData });
@@ -156,12 +165,29 @@ const Signup = ({ navigation, route }) => {
         <Text style={styles.goodToSee}>
           Good to see you! Signup to get started.
         </Text>
-        <Text style={styles.emailPassword}>Email Address</Text>
-        <Input
-          placeholder={"Enter Email"}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
+        <Text style={styles.emailPassword}>Phone Number</Text>
+        <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={phoneNumber}
+                  defaultCode={countryCode}
+                  layout="second"
+                  onChangeText={(text) => {
+                    setPhoneNumber(text);
+                  }}
+                  onChangeFormattedText={(text) => {
+                    setFormattedValue(text);
+                  }}
+                  onChangeCountry={(text) => {
+                    console.log(text)
+                    setPhoneCode(text.callingCode[0]);
+                    setCountryCode(text.cca2);
+                  }}
+                  codeTextStyle={styles.codeTextStyle}
+                  containerStyle={styles.phoneInputContainerStyle}
+                  textInputStyle={styles.phoneTextStyle}
+                  textContainerStyle={styles.phoneTextContainerStyle}
+                  countryPickerButtonStyle={styles.countryPickerButtonStyle}
+                />
 
         <View style={styles.top10}>
           <Text style={styles.emailPassword}>Password</Text>
@@ -266,5 +292,37 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
+  },
+  codeTextStyle: {
+    fontFamily: fontFamily.Medium,
+    fontSize: moderateScale(12),
+  },
+  phoneInputContainerStyle: {
+    backgroundColor: 'rgba(237, 237, 237, 1)',
+    height: moderateScale(50),
+    borderRadius: moderateScale(14),
+    paddingHorizontal: moderateScale(7),
+    width: "100%",
+  },
+  phoneTextStyle: {
+    fontFamily: fontFamily.Regular,
+    fontSize: moderateScale(14),
+    alignItems: "center",
+    color: "black",
+    height: moderateScale(40),
+    backgroundColor:'rgba(237, 237, 237, 1)',
+  },
+  phoneTextContainerStyle: {
+    alignItems: "center",
+    fontSize: moderateScale(10),
+    color: "black",
+    backgroundColor:'rgba(237, 237, 237, 1)',
+  },
+  countryPickerButtonStyle: {
+    backgroundColor: "rgba(50, 80, 141, 0.2)",
+    width: moderateScale(60),
+    height: moderateScale(30),
+    borderRadius: moderateScale(10),
+    alignSelf: "center",
   },
 });

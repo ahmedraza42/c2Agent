@@ -1,34 +1,4 @@
-// import React, { useRef, useState } from "react";
-// import {
-//   Alert,
-//   Image,
-//   ImageBackground,
-//   Keyboard,
-//   ScrollView,
-//   StyleSheet,
-//   TouchableOpacity,
-//   View,
-// } from "react-native";
-// import Text from "../components/Text";
-// import colors from "../theme/Colors";
-// import { moderateScale } from "react-native-size-matters";
-// import { fontFamily } from "../theme/Fonts";
-// import Button from "../components/Button";
-// import ImagePicker from "react-native-image-crop-picker";
-// import FileViewer from "react-native-file-viewer";
-// import { showToast } from "../components/Toast";
-// import { RNCamera } from "react-native-camera";
-// import DocumentPicker, {
-//   DirectoryPickerResponse,
-//   DocumentPickerResponse,
-//   isCancel,
-//   isInProgress,
-//   types,
-// } from "react-native-document-picker";
-// import { uploadImage } from "../services/reusableApis";
-// import Modal from "react-native-modal";
-// import MyCamera from "../components/MyCamera";
-// import Input from "../components/Input";
+
 
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
@@ -86,6 +56,23 @@ console.log({tradelicenseFile})
   const [showOcrData, setShowOcrData] = useState(false);
   const [_, setModal] = useContext(LoaderContext);
   const [dataFileName, setDataFileName] = useState('');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageArray, setImageArray] = useState([
+    {
+      uri: "",
+      type: "",
+      base64: "",
+      filename: "",
+      key: "tradeLicense_p1",
+    },
+    {
+      uri: "",
+      type: "",
+      base64: "",
+      filename: "",
+      key: "tradeLicense_p2",
+    },
+  ]);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -184,7 +171,67 @@ console.log({tradelicenseFile})
       handleError(e);
     }
   };
-
+  const renderImages = (imageArray) => {
+    console.log({ imageArray });
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {imageArray?.map((item, index) => {
+          if (item.uri) {
+            return (
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                
+                <TouchableOpacity
+                  style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
+                  onPress={() => {}}
+                >
+                  {selectedImage(item.uri)}
+                </TouchableOpacity>
+                {/* <TouchableOpacity
+                  onPress={() => {
+                    setTimeout(() => {
+                      toggleModal();
+                    }, 250);
+                  }}
+                  style={styles.cameraIcon}
+                >
+                  {cameraImage()}
+                </TouchableOpacity> */}
+              </View>
+            );
+          } else {
+            return (
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                
+                <TouchableOpacity
+                style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
+                  onPress={() => {
+                    setSelectedImageIndex(index);
+                    setTimeout(() => {
+                      toggleModal();
+                    }, 250);
+                  }}
+                >
+                  <Image
+                    style={{width:moderateScale(60),height:moderateScale(60)}}
+                    resizeMode="contain"
+                    source={require("../assets/vectors/fileUnselected.png")}
+                  />
+                  <Text style={{marginTop:moderateScale(5),fontSize:moderateScale(15),fontFamily:fontFamily.Medium,color: "rgba(21, 21, 21, 0.4)",}}>Upload</Text>
+                  <Text style={{fontSize:moderateScale(15),fontFamily:fontFamily.Medium,color: "rgba(21, 21, 21, 0.4)",}}>{index==0?'Front Side':'Back Side'}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }
+        })}
+      </View>
+    );
+  };
   const cameraImage = () => {
     return (
       <Image
@@ -197,56 +244,86 @@ console.log({tradelicenseFile})
 
   const selectedImage = (uri) => {
     return (
-      <View>
+      <TouchableOpacity
+      onPress={() => {
+            setTimeout(() => {
+              toggleModal();
+            }, 250);
+          }}>
         <Image
           source={{ uri: uri }}
           style={{ ...styles.image, backgroundColor: "grey" }}
           resizeMode={"cover"}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setTimeout(() => {
-              toggleModal();
-            }, 250);
-          }}
-          style={styles.cameraIcon}
-        >
-          {cameraImage()}
-        </TouchableOpacity>
-      </View>
+        
+      </TouchableOpacity>
     );
   };
 
-  const openImagePicker = (type) => {
+  const sendImageFrontToBackend=async(base,uri,file,type)=>{
+    let data =JSON.stringify(base)
+    try {
+      setModal((state) => ({
+        ...state,
+        heading: "Processing, Please wait",
+        visible: true,
+        }));
+      const res =await API_CALLS.emiratesFront(data)
+      console.log({res})
+      let imageArrayCopy = [...imageArray];
+      imageArrayCopy[selectedImageIndex].uri = uri;
+      imageArrayCopy[selectedImageIndex].type = type;
+      imageArrayCopy[selectedImageIndex].filename = file;
+      imageArrayCopy[selectedImageIndex].base64 =
+        "data:image/jpeg;base64," + base;
+      setImageArray(imageArrayCopy);
+      setIsDocument(false);
+    } catch (error) {
+      console.log('sendImageFrontToBackend',error)
+    }finally{
+      setModal((state) => ({
+        ...state,
+        heading: "Processing, Please wait",
+        visible: false,
+        }));
+    }
+   
+  }
+
+  const openImagePicker = () => {
     ImagePicker.openPicker({
       mediaType: "photo",
-      width: 700,
-      height: 700,
+      width: 500,
+      height: 500,
       // cropping: true,
       includeBase64: true,
     }).then((data) => {
-       const fileName = data.path.split("/").pop();
-        setImageTypeTrade(data.mime),
-          setBaseTrade("data:image/jpeg;base64," + data.data);
-        setImageFileNameTrade(fileName), setImageUriTrade(data.path);
-        setIsDocumentTrade(false);
-        sendImage(data.mime,fileName,"data:image/jpeg;base64," + data.data)
+      console.log({ data });
+      if(selectedImageIndex==0){
+        const fileName = data.path.split("/").pop();
+        sendImageFrontToBackend(data.data,data.path,fileName,data.mime)
+      }
+      // 
+     
     });
   };
 
- const takePicture = async () => {
+  takePicture = async () => {
     if (cameraRef?.current) {
       const options = { quality: 0.6, base64: true };
       const data = await cameraRef?.current.takePictureAsync(options);
-     
-        const filname = data.uri.split("/").pop();
-        setImageTypeTrade("image/jpg"),
-          setImageFileNameTrade(filname),
-          setImageUriTrade(data.uri);
-        setBaseTrade("data:image/jpeg;base64," + data.base64);
-        setCamera(false);
-        setIsDocumentTrade(false);
-        sendImage("image/jpg",filname,"data:image/jpeg;base64," + data.base64)
+      console.log(data);
+
+      const fileName = data.uri.split("/").pop();
+      let imageArrayCopy = [...imageArray];
+      imageArrayCopy[selectedImageIndex].uri = data.uri;
+      imageArrayCopy[selectedImageIndex].type = "image/jpg";
+      imageArrayCopy[selectedImageIndex].filename = fileName;
+      imageArrayCopy[selectedImageIndex].base64 =
+        "data:image/jpeg;base64," + data.base64;
+      setImageArray(imageArrayCopy);
+      setCamera(false);
+      setIsDocument(false);
     }
   };
   if (camera) {
@@ -255,43 +332,11 @@ console.log({tradelicenseFile})
         cameraRef={cameraRef}
         takePicture={() => takePicture()}
         onClose={() => setCamera(false)}
-        type="square"
+        type="idcard"
       />
     );
   }
 
-  const rendertrade = (imageUriFront) => {
-    return imageUriFront ? (
-      <View style={{ alignItems: "center" }}>
-        {selectedImage(imageUriFront)}
-      </View>
-    ) : (
-      <TouchableOpacity
-        onPress={() => {
-          setSelectedType("trade");
-          setTimeout(() => {
-            toggleModal();
-          }, 250);
-        }}
-        style={styles.imageRootView}
-      >
-        <Image
-          source={require("../assets/vectors/fileUnselected.png")}
-          style={{ width: moderateScale(45), height: moderateScale(70) }}
-          resizeMode="contain"
-        />
-        <Text
-          style={{
-            fontFamily: fontFamily.Medium,
-            fontSize: moderateScale(15),
-            color: colors.lightText,
-          }}
-        >
-          Upload
-        </Text>
-      </TouchableOpacity>
-    );
-  };
 
 const gotoMerchantPage=async()=>{
   if (Platform.OS === "android" && !(await requestLocationPermission())) {
@@ -366,14 +411,14 @@ const gotoMerchantPage=async()=>{
                   ...styles.categoryText,
                 }}
               >
-                Trade License
+               Emirates ID
               </Text>
             </View>
             <View style={styles.rowCenter}>
               <View style={styles.primaryRound}>
                 <Text style={styles.primaryNumber}>2</Text>
               </View>
-              <Text style={styles.categoryText}>VAT Certificate</Text>
+              <Text style={styles.categoryText}>Driving License</Text>
             </View>
 
             <View style={styles.rowCenter}>
@@ -386,13 +431,13 @@ const gotoMerchantPage=async()=>{
                   color: "rgba(21, 21, 21, 0.4)",
                 }}
               >
-                Merchant
+                Info
               </Text>
             </View>
           </View>
           {/* <View style={styles.top10} /> */}
 
-          <Text style={styles.emailPassword}>VAT Certificate</Text>
+          <Text style={styles.emailPassword}>Driving License</Text>
           {isDocumenttrade ? (
             <View style={styles.imageRootView}>
               <Image
@@ -410,7 +455,7 @@ const gotoMerchantPage=async()=>{
               </TouchableOpacity>
             </View>
           ) : (
-            rendertrade(imageUriTrade)
+            renderImages(imageArray)
           )}
           <Text style={styles.uploadText}>Upload PDF or picture</Text>
           <View style={styles.top10} />
@@ -455,7 +500,7 @@ const gotoMerchantPage=async()=>{
             Choose an action
           </Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               toggleModal(), openDocument();
             }}
@@ -466,7 +511,7 @@ const gotoMerchantPage=async()=>{
             >
               Upload Document
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => {
               toggleModal(), openImagePicker();
@@ -659,7 +704,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.SemiBold,
     color: colors.black,
     fontSize: moderateScale(14),
-    marginBottom: moderateScale(4),
+    marginBottom: moderateScale(10),
     marginLeft: moderateScale(4),
   },
   forgetPassword: {
@@ -729,8 +774,8 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   image: {
-    height: moderateScale(100),
-    width: moderateScale(100),
+    height: moderateScale(130),
+    width: moderateScale(130),
     borderRadius: moderateScale(20),
   },
   cameraIcon: {
