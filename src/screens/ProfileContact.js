@@ -37,10 +37,11 @@ import { ModalContext } from "../context/ModalContext";
 import { LoaderContext } from "../context/LoaderContext";
 import Input from "../components/Input";
 import { requestLocationPermission } from "../utils/permission";
+import { isEmpty } from "lodash";
 const ProfileContact = ({ navigation, route }) => {
-  let tradelicenseFile=route?.params?.item||'';
+  let emiratesData=route?.params?.item||'';
   const cameraRef = useRef(null);
-console.log({tradelicenseFile})
+console.log({emiratesData})
   const [imageTypeTrade, setImageTypeTrade] = useState("");
   const [baseTrade, setBaseTrade] = useState(null);
   const [imageUriTrade, setImageUriTrade] = useState("");
@@ -64,13 +65,6 @@ console.log({tradelicenseFile})
       base64: "",
       filename: "",
       key: "tradeLicense_p1",
-    },
-    {
-      uri: "",
-      type: "",
-      base64: "",
-      filename: "",
-      key: "tradeLicense_p2",
     },
   ]);
   const toggleModal = () => {
@@ -107,9 +101,10 @@ console.log({tradelicenseFile})
         const res = await API_CALLS.ocr(data);
         console.log({ res });
         if (res.status == true) {
-          setDataFileName(res?.data?.vat_certificate?.filename)
+          // setDataFileName(res?.data)
           let arr = [];
-          for (let key in res?.data?.vat_certificate?.data) {
+          for (let key in res?.data) {
+            // console.lo
             arr.push({keyName:key,value: res.data.vat_certificate?.data[key]});
         }
         console.log({arr})
@@ -184,7 +179,7 @@ console.log({tradelicenseFile})
         {imageArray?.map((item, index) => {
           if (item.uri) {
             return (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View style={{ justifyContent: "center", alignItems: "center" ,width:'100%'}}>
                 
                 <TouchableOpacity
                   style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
@@ -206,7 +201,7 @@ console.log({tradelicenseFile})
             );
           } else {
             return (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View style={{ justifyContent: "center", alignItems: "center" ,width:'100%'}}>
                 
                 <TouchableOpacity
                 style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
@@ -261,23 +256,43 @@ console.log({tradelicenseFile})
   };
 
   const sendImageFrontToBackend=async(base,uri,file,type)=>{
-    let data =JSON.stringify(base)
+    console.log({base})
+    let data = base
     try {
+      setCamera(false);
       setModal((state) => ({
         ...state,
         heading: "Processing, Please wait",
         visible: true,
         }));
-      const res =await API_CALLS.emiratesFront(data)
+      const res =await API_CALLS.drivingLicense(data)
       console.log({res})
-      let imageArrayCopy = [...imageArray];
-      imageArrayCopy[selectedImageIndex].uri = uri;
-      imageArrayCopy[selectedImageIndex].type = type;
-      imageArrayCopy[selectedImageIndex].filename = file;
-      imageArrayCopy[selectedImageIndex].base64 =
-        "data:image/jpeg;base64," + base;
-      setImageArray(imageArrayCopy);
-      setIsDocument(false);
+      if(!isEmpty(res.data)){
+        let arr = [];
+        for (let key in res?.data) {
+          console.log('feres.data[key]fdf',res.data[key].key)
+          console.log('feres.data[key]fdf',res.data[key].value)
+          // console.log('res?.data?.key',res?.data?.key)
+          // console.log('res?.data',res?.data)
+          arr.push({keyName:res.data[key].key,value: res.data[key].value});
+      }
+      console.log({arr})
+        setTradeData(arr)
+        setShowOcrData(true)
+        setBtnloading(false);
+        let imageArrayCopy = [...imageArray];
+        imageArrayCopy[selectedImageIndex].uri = uri;
+        imageArrayCopy[selectedImageIndex].type = type;
+        imageArrayCopy[selectedImageIndex].filename = file;
+        imageArrayCopy[selectedImageIndex].base64 = base;
+          // "data:image/jpeg;base64," + base;
+        setImageArray(imageArrayCopy);
+        setIsDocument(false);
+        setCamera(false);
+      }
+      else{
+       showToast('Emirates ID image is not valid please upload proper image')
+      }
     } catch (error) {
       console.log('sendImageFrontToBackend',error)
     }finally{
@@ -313,17 +328,10 @@ console.log({tradelicenseFile})
       const options = { quality: 0.6, base64: true };
       const data = await cameraRef?.current.takePictureAsync(options);
       console.log(data);
-
-      const fileName = data.uri.split("/").pop();
-      let imageArrayCopy = [...imageArray];
-      imageArrayCopy[selectedImageIndex].uri = data.uri;
-      imageArrayCopy[selectedImageIndex].type = "image/jpg";
-      imageArrayCopy[selectedImageIndex].filename = fileName;
-      imageArrayCopy[selectedImageIndex].base64 =
-        "data:image/jpeg;base64," + data.base64;
-      setImageArray(imageArrayCopy);
-      setCamera(false);
-      setIsDocument(false);
+      if(selectedImageIndex==0){
+        const fileName = data.uri.split("/").pop();
+        sendImageFrontToBackend(data.base64,data.uri,fileName,"image/jpg")
+      }
     }
   };
   if (camera) {
@@ -339,24 +347,24 @@ console.log({tradelicenseFile})
 
 
 const gotoMerchantPage=async()=>{
-  if (Platform.OS === "android" && !(await requestLocationPermission())) {
-    Alert.alert(
-      "Location permission not granted ",
-      "Please goto app settings and grant the location permission",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "Goto Settings", onPress: () => Linking.openSettings() },
-      ]
-    );
-    return;
-    // showToast("Please goto app settings and grant the location permission")
-    // return;
-  }
-  navigation.navigate("ProfileMerchantt",{tradeFile:tradelicenseFile,vatFile:dataFileName});
+  // if (Platform.OS === "android" && !(await requestLocationPermission())) {
+  //   Alert.alert(
+  //     "Location permission not granted ",
+  //     "Please goto app settings and grant the location permission",
+  //     [
+  //       {
+  //         text: "Cancel",
+  //         onPress: () => console.log("Cancel Pressed"),
+  //         style: "cancel",
+  //       },
+  //       { text: "Goto Settings", onPress: () => Linking.openSettings() },
+  //     ]
+  //   );
+  //   return;
+  //   // showToast("Please goto app settings and grant the location permission")
+  //   // return;
+  // }
+  navigation.navigate("ProfileMerchantt",{emiratesData:emiratesData,drivingLisenceData:tradeData});
 }
   const removeTrade = () => {
     setImageTypeTrade(""), setImageFileNameTrade(""), setImageUriTrade("");
@@ -457,7 +465,6 @@ const gotoMerchantPage=async()=>{
           ) : (
             renderImages(imageArray)
           )}
-          <Text style={styles.uploadText}>Upload PDF or picture</Text>
           <View style={styles.top10} />
           {showOcrData&&
           <View style={{height:moderateScale(210),marginBottom:moderateScale(10)}}>
@@ -472,16 +479,10 @@ const gotoMerchantPage=async()=>{
             loading={btnloading}
             text={"NEXT"}
             onPress={() => {
-              if(dataFileName){
-                gotoMerchantPage()
-                
-              }else{
-                showToast('VAT Certificate is required')
-              }
-              
-              // sendImage()
+              gotoMerchantPage()
             }}
           />}
+             <View style={{height:moderateScale(100)}}/>
         {/* </ScrollView> */}
       </View>
       <Modal

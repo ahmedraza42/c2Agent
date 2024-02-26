@@ -32,7 +32,7 @@ import SelectDropdown from "react-native-select-dropdown";
 // AIzaSyBTDy36qLgX3Ff6ubBMpWI9TcFoOkFDzhw
 const Signup = ({ navigation, route }) => {
   const phoneInput = useRef(null);
-  const [password, setPassword] = useState("CF!janamercer297");
+  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("test21@test.com");
   const [loading, setLoading] = useState(false);
   const [formattedValue, setFormattedValue] = useState("");

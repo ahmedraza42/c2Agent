@@ -43,6 +43,7 @@
     "react-native-maps": "^1.8.4",
     "react-native-markdown-view": "^1.1.4",
     "react-native-modal": "^13.0.1",
+    "react-native-multiple-select": "^0.5.12",
     "react-native-paper": "^5.11.4",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "2.2.4",

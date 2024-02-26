@@ -32,6 +32,7 @@ import API_CALLS from "../services/constants";
 import { ModalContext } from "../context/ModalContext";
 import { LoaderContext } from "../context/LoaderContext";
 import Input from "../components/Input";
+import { isEmpty } from "lodash";
 const ProfileDocument = ({ navigation, route }) => {
   const cameraRef = useRef(null);
 
@@ -59,13 +60,13 @@ const ProfileDocument = ({ navigation, route }) => {
       filename: "",
       key: "tradeLicense_p1",
     },
-    {
-      uri: "",
-      type: "",
-      base64: "",
-      filename: "",
-      key: "tradeLicense_p2",
-    },
+    // {
+    //   uri: "",
+    //   type: "",
+    //   base64: "",
+    //   filename: "",
+    //   key: "tradeLicense_p2",
+    // },
   ]);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -91,18 +92,15 @@ const ProfileDocument = ({ navigation, route }) => {
         name: filename,
       });
   
-      console.log(dataa);
       let data = dataa;
       try {
         const res = await API_CALLS.ocr(data);
-        console.log({ res });
         if (res.status == true) {
           setDataFileName(res?.data?.trade_license?.filename)
           let arr = [];
           for (let key in res?.data?.trade_license?.data) {
             arr.push({keyName:key,value: res.data.trade_license?.data[key]});
         }
-        console.log({arr})
           setTradeData(arr)
           setShowOcrData(true)
           setBtnloading(false);
@@ -162,7 +160,6 @@ const ProfileDocument = ({ navigation, route }) => {
     }
   };
   const renderImages = (imageArray) => {
-    console.log({ imageArray });
     return (
       <View
         style={{
@@ -174,7 +171,7 @@ const ProfileDocument = ({ navigation, route }) => {
         {imageArray?.map((item, index) => {
           if (item.uri) {
             return (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View style={{ justifyContent: "center", alignItems: "center",width:'100%'}}>
                 
                 <TouchableOpacity
                   style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
@@ -196,7 +193,7 @@ const ProfileDocument = ({ navigation, route }) => {
             );
           } else {
             return (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View style={{ justifyContent: "center", alignItems: "center",width:'100%' }}>
                 
                 <TouchableOpacity
                 style={{width:moderateScale(140),height:moderateScale(140),borderRadius:moderateScale(20),backgroundColor:'rgba(237, 237, 237, 1)',justifyContent:'center',alignItems:'center'}}
@@ -234,8 +231,12 @@ const ProfileDocument = ({ navigation, route }) => {
   };
 
   const sendImageFrontToBackend=async(base,uri,file,type)=>{
-    let data =JSON.stringify(base)
+    console.log({base})
+    let data =
+    base
+    // JSON.stringify(base)
     try {
+      setCamera(false);
       setModal((state) => ({
         ...state,
         heading: "Processing, Please wait",
@@ -243,14 +244,33 @@ const ProfileDocument = ({ navigation, route }) => {
         }));
       const res =await API_CALLS.emiratesFront(data)
       console.log({res})
-      let imageArrayCopy = [...imageArray];
-      imageArrayCopy[selectedImageIndex].uri = uri;
-      imageArrayCopy[selectedImageIndex].type = type;
-      imageArrayCopy[selectedImageIndex].filename = file;
-      imageArrayCopy[selectedImageIndex].base64 =
-        "data:image/jpeg;base64," + base;
-      setImageArray(imageArrayCopy);
-      setIsDocument(false);
+      if(!isEmpty(res.data)){
+        let arr = [];
+        for (let key in res?.data) {
+          console.log('feres.data[key]fdf',res.data[key])
+          console.log('res?.data?.key',res?.data?.key)
+          console.log('res?.data',res?.data)
+          arr.push({keyName:key,value: res.data[key]});
+      }
+      console.log({arr})
+        setTradeData(arr)
+        setShowOcrData(true)
+        setBtnloading(false);
+        let imageArrayCopy = [...imageArray];
+        imageArrayCopy[selectedImageIndex].uri = uri;
+        imageArrayCopy[selectedImageIndex].type = type;
+        imageArrayCopy[selectedImageIndex].filename = file;
+        imageArrayCopy[selectedImageIndex].base64 = base;
+          // "data:image/jpeg;base64," + base;
+        setImageArray(imageArrayCopy);
+        setIsDocument(false);
+        setCamera(false);
+      }
+      else{
+       showToast('Emirates ID image is not valid please upload proper image')
+      }
+     
+     
     } catch (error) {
       console.log('sendImageFrontToBackend',error)
     }finally{
@@ -259,11 +279,12 @@ const ProfileDocument = ({ navigation, route }) => {
         heading: "Processing, Please wait",
         visible: false,
         }));
+        setIsDocument(false);
+        setCamera(false);
     }
    
   }
   const selectedImage = (uri) => {
-    console.log({uri})
     return (
       <TouchableOpacity
       onPress={() => {
@@ -289,7 +310,6 @@ const ProfileDocument = ({ navigation, route }) => {
       // cropping: true,
       includeBase64: true,
     }).then((data) => {
-      console.log({ data });
       if(selectedImageIndex==0){
         const fileName = data.path.split("/").pop();
         sendImageFrontToBackend(data.data,data.path,fileName,data.mime)
@@ -303,18 +323,10 @@ const ProfileDocument = ({ navigation, route }) => {
     if (cameraRef?.current) {
       const options = { quality: 0.6, base64: true };
       const data = await cameraRef?.current.takePictureAsync(options);
-      console.log(data);
-
-      const fileName = data.uri.split("/").pop();
-      let imageArrayCopy = [...imageArray];
-      imageArrayCopy[selectedImageIndex].uri = data.uri;
-      imageArrayCopy[selectedImageIndex].type = "image/jpg";
-      imageArrayCopy[selectedImageIndex].filename = fileName;
-      imageArrayCopy[selectedImageIndex].base64 =
-        "data:image/jpeg;base64," + data.base64;
-      setImageArray(imageArrayCopy);
-      setCamera(false);
-      setIsDocument(false);
+      if(selectedImageIndex==0){
+        const fileName = data.uri.split("/").pop();
+        sendImageFrontToBackend(data.base64,data.uri,fileName,"image/jpg")
+      }
     }
   };
   if (camera) {
@@ -336,10 +348,9 @@ const ProfileDocument = ({ navigation, route }) => {
     setShowOcrData(false)
   };
   const renderKey=(tradeData)=>{
-    console.log(tradeData,'dsdsd')
     return tradeData?.map((item,index)=>{
       return(
-<View>
+<View >
 <Text style={styles.emailPassword}>{item.keyName}</Text>
           <Input
             editable={false}
@@ -427,7 +438,6 @@ const ProfileDocument = ({ navigation, route }) => {
             renderImages(imageArray)
             // rendertrade(imageUriTrade)
           )}
-          <Text style={styles.uploadText}>Upload PDF or picture</Text>
           <View style={styles.top10} />
           {showOcrData&&
           <View style={{height:moderateScale(210),marginBottom:moderateScale(10)}}>
@@ -442,15 +452,10 @@ const ProfileDocument = ({ navigation, route }) => {
             loading={btnloading}
             text={"NEXT"}
             onPress={() => {
-              if(dataFileName){
-                navigation.navigate("ProfileContact",{item:dataFileName});
-              }else{
-                showToast('Trade License is required')
-              }
-              
-              // sendImage()
+                navigation.navigate("ProfileContact",{item:tradeData});
             }}
           />}
+          <View style={{height:moderateScale(100)}}/>
         {/* </ScrollView> */}
       </View>
       <Modal

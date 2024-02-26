@@ -9,6 +9,7 @@ import colors from "../theme/Colors";
 const Dropdown = ({ data=[], onSelect ,placeholder='' }) => {
   return (
     <SelectDropdown
+    search={true}
       data={data}
       onSelect={(selectedItem, index)=>{onSelect(selectedItem,index)}}
       defaultButtonText={placeholder}

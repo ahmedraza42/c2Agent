@@ -22,15 +22,47 @@ import Dropdown from "../components/Dropdown";
 import { UserContext } from "../context/UserContext";
 import API_CALLS from "../services/constants";
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MultiSelect from 'react-native-multiple-select';
 // import Geolocation from '@react-native-community/geolocation';
 import { requestLocationPermission } from "../utils/permission";
 import { showToast } from "../components/Toast";
 import { ModalContext } from "../context/ModalContext";
+import { isEmpty } from "lodash";
 const ProfileMerchantt = ({ navigation, route }) => {
-  let tradeFile=route.params.tradeFile||'';
-  let vatFile=route.params.vatFile||{};
-console.log({tradeFile})
-console.log({vatFile})
+  let emiratesData=route.params.emiratesData||{};
+  let drivingLisenceData=route.params.drivingLisenceData||{};
+console.log({emiratesData})
+console.log({drivingLisenceData})
+let arr = [];
+if(!isEmpty(emiratesData)){
+
+  for (let key in emiratesData) {
+    var keys = emiratesData[key].keyName;
+    // console.log('res?.data?.key',res?.data?.key)
+    // console.log('res?.data',res?.data)
+    arr.push({[keys]:emiratesData[key].value});
+}
+// console.log({arr})
+}
+if(!isEmpty(drivingLisenceData)){
+
+  for (let key in drivingLisenceData) {
+    var keys = drivingLisenceData[key].keyName;
+    // console.log('res?.data?.key',res?.data?.key)
+    // console.log('res?.data',res?.data)
+    arr.push({[keys]:drivingLisenceData[key].value});
+}
+console.log({arr})
+}
+// let obj =toObject(arr)
+// console.log({obj})
+// function toObject(arr) {
+//   var rv = {};
+//   for (var i = 0; i < arr.length; ++i)
+//   console.log('rv[i]',arr[i])
+//     rv[i] = arr[i];
+//   return rv;
+// }
 const [pop, setModal] = useContext(ModalContext);
   const [btnloading, setBtnloading] = useState(false);
   const [_, setUser] = useContext(UserContext);
@@ -46,28 +78,33 @@ const [pop, setModal] = useContext(ModalContext);
   const [address, setAddress] = useState('');
   const [lat, setLat] = useState(0.0);
   const [long, setLong] = useState(0.0);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItemsid, setSelectedItemsid] = useState([]);
+  const [name, setName] = useState(arr[1]?.Name||'');
   useEffect(() => {
-    requestLocationPermission()
+    // requestLocationPermission()
     getSetting();
   }, []);
-  useEffect(() => {
-    Geocoder.init("AIzaSyDipHIchD79mO4LM_C_54Hu9LkAfjVscUs");
-    if (Platform.OS==='android' &&requestLocationPermission() ) {
-      getLatLong()
-    }
-    else{
-      if (Platform.OS === 'ios') {
-        Geolocation.requestAuthorization();
-        Geolocation.setRNConfiguration({
-          skipPermissionRequests: false,
-         authorizationLevel: 'whenInUse',
-       });
+  // useEffect(() => {
+  //   Geocoder.init("AIzaSyDipHIchD79mO4LM_C_54Hu9LkAfjVscUs");
+  //   if (Platform.OS==='android' &&requestLocationPermission() ) {
+  //     getLatLong()
+  //   }
+  //   else{
+  //     if (Platform.OS === 'ios') {
+  //       Geolocation.requestAuthorization();
+  //       Geolocation.setRNConfiguration({
+  //         skipPermissionRequests: false,
+  //        authorizationLevel: 'whenInUse',
+  //      });
 
-       getLatLong()
-      }
-    }
-  }, []);
-
+  //      getLatLong()
+  //     }
+  //   }
+  // }, []);
+  const onSelectedItemsChange = selectedItems => {
+    setSelectedItems( selectedItems );
+  };
   const getLatLong = async () => {
     await Geolocation.getCurrentPosition(
       (position) => {
@@ -111,21 +148,10 @@ const [pop, setModal] = useContext(ModalContext);
   };
   const addMerchant = async () => {
     Keyboard.dismiss();
-    // saveItemToStorage("showCompleteProfile", "true");
-    // setUser((state) => ({
-    //   ...state,
-    //   isLoggedIn: true,
-    //   isUserFirstTime: false,
-    //   showCompleteProfile: true,
-    // }));
-    // return
-    if (selectedsegment=== "") {
-      showToast("Merchant Segment is required");
+    if (name=== "") {
+      showToast("Full Name is required");
       return;
-    } else if (selectedsubsegment === "") {
-      showToast("Merchant Sub Segment is required");
-      return;
-    }
+    } 
     else if (selectedCountry === "") {
       showToast("Country is required");
       return;
@@ -133,31 +159,39 @@ const [pop, setModal] = useContext(ModalContext);
     else if (selectedCity === "") {
       showToast("City is required");
       return;
-    }else if (address.trim() === "") {
-      showToast("Address is required");
-      return;
     }
     else{
       setBtnloading(true)
       try {
         let data={
+          "name" : name||"",
+          "country_id" : selectedCountry,
+          "city_id" : selectedItemsid,
+          "emirates_id": arr[0].IDNumber,
+          "nationality" : arr[2].Nationality,
+          "driving_license_no" : arr[4].LICENSE_NO,
+          "place_of_issue" : arr[5].PLACE_OF_ISSUE,
+          "dob" :arr[6].DATE_OF_BIRTH,
+          "issue_date" : arr[7].EXPIRY_DATE,
+          "expiry_date":arr[7].EXPIRY_DATE,
           // "name" :contact?.tradeLicenceName,
           // "owner_nationality_no" : contact?.emiratesid,
           // "owner_email" : contact?.email,
           // "representative_nationality_no" : contact?.representativeEmiratesid,
-          // "representative_email" :  contact?.representativeEmail,
-          "merchant_segment_id" : selectedsegment,
-          "merchant_sub_segment_id" : selectedsubsegment,
-          "latitude": lat||"0.00",
-          "longitude" :long|| "0.00",
-          "country_id" : selectedCountry,
-          "city_id" : selectedCity,
-          "address": address,
-          on_boarded:true,
-          "vat_filename" : vatFile,
-          "trade_license_filename" : tradeFile
+          // // "representative_email" :  contact?.representativeEmail,
+          // "merchant_segment_id" : selectedsegment,
+          // "merchant_sub_segment_id" : selectedsubsegment,
+          // "latitude": lat||"0.00",
+          // "longitude" :long|| "0.00",
+          // "country_id" : selectedCountry,
+          // "city_id" : selectedCity,
+          // "address": address,
+          // on_boarded:true,
+          // "vat_filename" : vatFile,
+          // "trade_license_filename" : tradeFile
         }
-        const response = await API_CALLS.merchantOnboarding(data);
+        console.log({data})
+        const response = await API_CALLS.salesOnboarding(data);
         console.log({response})
         if (response.status === true) {
           // showToast(response.message||'Merchant Added')
@@ -185,6 +219,7 @@ const [pop, setModal] = useContext(ModalContext);
     }
     
   };
+  console.log({selectedItems})
 
   return (
     <View style={styles.container}>
@@ -211,21 +246,21 @@ const [pop, setModal] = useContext(ModalContext);
         <View style={styles.primaryRound}>
                 <Text style={styles.primaryNumber}>1</Text>
               </View>
-          <Text style={styles.categoryText}>Document</Text>
+          <Text style={styles.categoryText}>Emirates ID</Text>
           </View>
 
           <View style={styles.rowCenter}>
           <View style={styles.primaryRound}>
                 <Text style={styles.primaryNumber}>2</Text>
               </View>
-          <Text style={styles.categoryText}>Contact</Text>
+          <Text style={styles.categoryText}>Driving License</Text>
           </View>
 
           <View style={styles.rowCenter}>
           <View style={styles.primaryRound}>
                 <Text style={styles.primaryNumber}>3</Text>
               </View>
-          <Text style={styles.categoryText}>Merchant</Text>
+          <Text style={styles.categoryText}>Info</Text>
           </View>
         </View>
         <ScrollView
@@ -235,30 +270,62 @@ const [pop, setModal] = useContext(ModalContext);
         >
        
         <View style={styles.top10}/>
-        <Text style={styles.emailPassword}>Merchant Segment</Text>
-          <Dropdown data={segment} onSelect={(item,index)=>{setSelectedSegment(item.id)}}/>
-           <Text style={styles.emailPassword}>Merchant Sub Segment</Text>
-           <Dropdown data={subsegment} onSelect={(item,index)=>{setSelectedsubSegment(item.id)}}/>
+        <Text style={styles.emailPassword}>Full Name</Text>
+          <Input
+            placeholder={"Type Here"}
+            value={name}
+            onChangeText={(t)=>{setName(t)}}
+          />
+          
          
          <View style={styles.cityCountryRowView}>
           <View style={{flex:1}}>
           <Text style={styles.emailPassword}>Country</Text>
            <Dropdown data={country} onSelect={(item,index)=>{setSelectedCountry(item.id)}}/>
           </View>
-          <View style={{width:moderateScale(15)}}/>
-          <View style={{flex:1}}>
-          <Text style={styles.emailPassword}>City</Text>
-           <Dropdown data={city} onSelect={(item,index)=>{setSelectedCity(item.id)}}/>
-          </View>
+          {/* <View style={{width:moderateScale(15)}}/> */}
+          
          </View>
-
-         <Text style={styles.emailPassword}>Address</Text>
-          <Input
-            placeholder={"Type Here"}
-            value={address}
-            onChangeText={(t)=>{setAddress(t)}}
-          />
-           <View style={{ marginVertical: moderateScale(20),
+         <View style={{flex:1}}>
+          <Text style={styles.emailPassword}>City</Text>
+           <Dropdown data={city} onSelect={(item,index)=>{
+            // let check =selectedItems.findIndex((i)=>{
+            //   console.log('i.value',i.value)
+            //   console.log('item.value',item)
+            //   i.value===item.name});
+            console.log({item})
+           
+            let copy=[...selectedItems];
+            let copyid=[...selectedItemsid];
+            let indexs = copy.indexOf(item.name);
+            console.log({indexs})
+            if(indexs==-1){
+              copy.push(item.name)
+              copyid.push(item.id)
+            setSelectedItems(copy)
+            setSelectedItemsid(copyid)
+            setSelectedCity(item.id)}
+            else{
+                showToast('Already Added')
+              }
+            }
+            }
+           
+           />
+          </View>
+            <View style={{flexDirection:'row',flexWrap:'wrap'}}>
+              {selectedItems.map((item,index)=>{
+                return(
+                  <View style={{padding:moderateScale(5),justifyContent:'center',alignItems:'center', backgroundColor:'rgba(237, 237, 237, 1)',margin:moderateScale(5),borderRadius:moderateScale(10)}}>
+                  <Text>{item}</Text>
+                  </View>
+                  
+                )
+              
+              })}
+            </View>
+         
+           {/* <View style={{ marginVertical: moderateScale(20),
     height:moderateScale(200),}}>
           <MapView
         provider={PROVIDER_GOOGLE}
@@ -290,7 +357,7 @@ const [pop, setModal] = useContext(ModalContext);
         />
         
       </MapView>
-          </View>
+          </View> */}
          <View style={styles.top10}/>
           <Button
             loading={btnloading}

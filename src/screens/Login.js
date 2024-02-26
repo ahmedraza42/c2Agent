@@ -31,7 +31,7 @@ const Login = ({ navigation, route }) => {
   const [userCredential, setUserCredential] = useContext(UserCredentialContext);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("ahmed@gmail.com");
-  const [password, setPassword] = useState("Ahmed@123");
+  const [password, setPassword] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
   const [countryCode, setCountryCode] = useState("AE");
   const [phoneCode, setPhoneCode] = useState();
@@ -95,14 +95,14 @@ const Login = ({ navigation, route }) => {
         await _tokenStorageService.setRefreshToken(
           response?.data?.refreshToken
         );
-        saveItemToStorage("showCompleteProfile", "true");
-        setUser((state) => ({
-          ...state,
-          isLoggedIn: true,
-          isUserFirstTime: false,
-          showCompleteProfile: true,
-        }));
-        return
+        // saveItemToStorage("showCompleteProfile", "true");
+        // setUser((state) => ({
+        //   ...state,
+        //   isLoggedIn: true,
+        //   isUserFirstTime: false,
+        //   showCompleteProfile: true,
+        // }));
+        // return
         await checkUserfillAllRequiredDoc(response);
         setLoading(false);
       } else {
@@ -174,8 +174,8 @@ const Login = ({ navigation, route }) => {
               changeText={(text) => setPassword(text)}
             />
           </View>
-
-          <View style={styles.forgotView}>
+                  <View style={styles.forgotView}/>
+          {/* <View style={styles.forgotView}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("ForgetPassword");
@@ -183,7 +183,7 @@ const Login = ({ navigation, route }) => {
             >
               <Text style={styles.forgetPassword}>Forgot password?</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <Button
             loading={loading}
