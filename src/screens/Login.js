@@ -130,6 +130,7 @@ const Login = ({ navigation, route }) => {
           style={styles.icon}
           resizeMode="contain"
         />
+        <Text style={{fontFamily:fontFamily.SemiBold,fontSize:moderateScale(16),color:'white',marginTop:moderateScale(10)}}>Agent App</Text>
       </View>
       <View style={styles.container2}>
         <ScrollView

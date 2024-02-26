@@ -525,7 +525,7 @@ const gotoMerchantPage=async()=>{
               Pick from Gallery
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               toggleModal(), setCamera(true);
             }}
@@ -536,7 +536,7 @@ const gotoMerchantPage=async()=>{
             >
               Take a Photo
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             onPress={() => toggleModal()}

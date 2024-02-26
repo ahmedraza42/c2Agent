@@ -24,7 +24,7 @@ import API_CALLS from "../services/constants";
 import { remove, saveItemToStorage } from "../utils/storage";
 import Geolocation from "react-native-geolocation-service";
 import { requestLocationPermission } from "../utils/permission";
-import CountryPicker from 'react-native-country-picker-modal';
+import CountryPicker from "react-native-country-picker-modal";
 import Geocoder from "react-native-geocoding";
 import { GenerateRandomNumberForDeviceID } from "../services/reusableFunctions";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -42,18 +42,17 @@ const Signup = ({ navigation, route }) => {
 
   useEffect(() => {
     Geocoder.init("AIzaSyDipHIchD79mO4LM_C_54Hu9LkAfjVscUs");
-    if (Platform.OS==='android' &&requestLocationPermission() ) {
-      getLatLong()
-    }
-    else{
-      if (Platform.OS === 'ios') {
+    if (Platform.OS === "android" && requestLocationPermission()) {
+      getLatLong();
+    } else {
+      if (Platform.OS === "ios") {
         Geolocation.requestAuthorization();
         Geolocation.setRNConfiguration({
           skipPermissionRequests: false,
-         authorizationLevel: 'whenInUse',
-       });
+          authorizationLevel: "whenInUse",
+        });
 
-       getLatLong()
+        getLatLong();
       }
     }
   }, []);
@@ -76,9 +75,9 @@ const Signup = ({ navigation, route }) => {
     Geocoder.from(lat, long)
       .then((json) => {
         var location = json.results[0];
-        console.log({location});
+        console.log({ location });
       })
-      .catch((error) => console.log('error error',error));
+      .catch((error) => console.log("error error", error));
   };
   const handleSignup = () => {
     // navigation.navigate('SignupOTP')
@@ -103,17 +102,16 @@ const Signup = ({ navigation, route }) => {
     //   showToast("Phone number is required");
     //   return;
     // }
-    
     else if (password.trim() === "") {
       showToast("Password is required");
       return;
-    } 
-    else if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/) ) {
-      showToast('Must contain atleast one number , uppercase and lowercase letter and 8 characters long');
+    } else if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)) {
+      showToast(
+        "Must contain atleast one number , uppercase and lowercase letter and 8 characters long"
+      );
       return;
     }
-      doSIgnup();
-    
+    doSIgnup();
   };
 
   const doSIgnup = async (type) => {
@@ -122,26 +120,25 @@ const Signup = ({ navigation, route }) => {
       remove("mentee");
       remove("showCompleteProfile");
       let randomDevicesId = GenerateRandomNumberForDeviceID();
-      console.log({formattedValue})
+      console.log({ formattedValue });
       setLoading(true);
       const data = {
         phone_number: formattedValue,
         password: password,
-        "type" : "seller"
+        type: "seller",
       };
       const signupData = await API_CALLS.signup(data);
       console.log({ signupData });
       if (signupData.status == true) {
-        showToast('Signup Successful')
-        console.log('response.data.path',signupData.data.path)
+        showToast("Signup Successful");
+        console.log("response.data.path", signupData.data.path);
         await saveItemToStorage("qrcode", signupData.data.path);
         navigation.navigate("Login");
       }
     } catch (error) {
       console.log({ error });
       showToast(
-        error?.response?.data?.message ||
-          "Something went wrong ,Signup failed"
+        error?.response?.data?.message || "Something went wrong ,Signup failed"
       );
     } finally {
       setLoading(false);
@@ -150,82 +147,91 @@ const Signup = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.iconView}>
-      <Image
-        source={require("../assets/icons/loginIcon.png")}
-        style={styles.icon}
-        resizeMode="contain"
-      />
-    </View>
-    <View style={styles.container2}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        automaticallyAdjustKeyboardInsets={true}
-        style={{ flex: 1 }}
-      >
-        <Text style={styles.heading}>SIGN UP</Text>
-        <Text style={styles.goodToSee}>
-          Good to see you! Signup to get started.
-        </Text>
-        <Text style={styles.emailPassword}>Phone Number</Text>
-        <PhoneInput
-                  ref={phoneInput}
-                  defaultValue={phoneNumber}
-                  defaultCode={countryCode}
-                  layout="second"
-                  onChangeText={(text) => {
-                    setPhoneNumber(text);
-                  }}
-                  onChangeFormattedText={(text) => {
-                    setFormattedValue(text);
-                  }}
-                  onChangeCountry={(text) => {
-                    console.log(text)
-                    setPhoneCode(text.callingCode[0]);
-                    setCountryCode(text.cca2);
-                  }}
-                  codeTextStyle={styles.codeTextStyle}
-                  containerStyle={styles.phoneInputContainerStyle}
-                  textInputStyle={styles.phoneTextStyle}
-                  textContainerStyle={styles.phoneTextContainerStyle}
-                  countryPickerButtonStyle={styles.countryPickerButtonStyle}
-                />
-
-        <View style={styles.top10}>
-          <Text style={styles.emailPassword}>Password</Text>
-          <PasswordInput
-            placeholder="Enter Password"
-            value={password}
-            changeText={(text) => setPassword(text)}
-          />
-        </View>
-
-        <View style={styles.top20} />
-        <Button
-          loading={loading}
-          text={"SIGNUP"}
-          onPress={() => {
-            handleSignup();
-          }}
+      <View style={styles.iconView}>
+        <Image
+          source={require("../assets/icons/loginIcon.png")}
+          style={styles.icon}
+          resizeMode="contain"
         />
-        <View style={styles.top20} />
-        <View style={styles.justifyCenter}>
-          <Text
-            style={{
-              ...styles.forgetPassword,
-              fontFamily: fontFamily.Medium,
-            }}
-          >
-            Dont have an account?{" "}
+        <Text
+          style={{
+            fontFamily: fontFamily.SemiBold,
+            fontSize: moderateScale(16),
+            color: "white",
+            marginTop: moderateScale(10),
+          }}
+        >
+          Agent App
+        </Text>
+      </View>
+      <View style={styles.container2}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          automaticallyAdjustKeyboardInsets={true}
+          style={{ flex: 1 }}
+        >
+          <Text style={styles.heading}>SIGN UP</Text>
+          <Text style={styles.goodToSee}>
+            Good to see you! Signup to get started.
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.clickableText}>Login</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          <Text style={styles.emailPassword}>Phone Number</Text>
+          <PhoneInput
+            ref={phoneInput}
+            defaultValue={phoneNumber}
+            defaultCode={countryCode}
+            layout="second"
+            onChangeText={(text) => {
+              setPhoneNumber(text);
+            }}
+            onChangeFormattedText={(text) => {
+              setFormattedValue(text);
+            }}
+            onChangeCountry={(text) => {
+              console.log(text);
+              setPhoneCode(text.callingCode[0]);
+              setCountryCode(text.cca2);
+            }}
+            codeTextStyle={styles.codeTextStyle}
+            containerStyle={styles.phoneInputContainerStyle}
+            textInputStyle={styles.phoneTextStyle}
+            textContainerStyle={styles.phoneTextContainerStyle}
+            countryPickerButtonStyle={styles.countryPickerButtonStyle}
+          />
+
+          <View style={styles.top10}>
+            <Text style={styles.emailPassword}>Password</Text>
+            <PasswordInput
+              placeholder="Enter Password"
+              value={password}
+              changeText={(text) => setPassword(text)}
+            />
+          </View>
+
+          <View style={styles.top20} />
+          <Button
+            loading={loading}
+            text={"SIGNUP"}
+            onPress={() => {
+              handleSignup();
+            }}
+          />
+          <View style={styles.top20} />
+          <View style={styles.justifyCenter}>
+            <Text
+              style={{
+                ...styles.forgetPassword,
+                fontFamily: fontFamily.Medium,
+              }}
+            >
+              Dont have an account?{" "}
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.clickableText}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
     </View>
-  </View>
-   
   );
 };
 
@@ -300,7 +306,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(12),
   },
   phoneInputContainerStyle: {
-    backgroundColor: 'rgba(237, 237, 237, 1)',
+    backgroundColor: "rgba(237, 237, 237, 1)",
     height: moderateScale(50),
     borderRadius: moderateScale(14),
     paddingHorizontal: moderateScale(7),
@@ -312,13 +318,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color: "black",
     height: moderateScale(40),
-    backgroundColor:'rgba(237, 237, 237, 1)',
+    backgroundColor: "rgba(237, 237, 237, 1)",
   },
   phoneTextContainerStyle: {
     alignItems: "center",
     fontSize: moderateScale(10),
     color: "black",
-    backgroundColor:'rgba(237, 237, 237, 1)',
+    backgroundColor: "rgba(237, 237, 237, 1)",
   },
   countryPickerButtonStyle: {
     backgroundColor: "rgba(50, 80, 141, 0.2)",
