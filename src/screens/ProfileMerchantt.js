@@ -120,8 +120,7 @@ const [pop, setModal] = useContext(ModalContext);
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
-  console.log({lat})
-  console.log({long})
+  console.log("arr[0]['Emirates ID]'",arr[0]['Emirates ID'])
 
   const getAddress = (lat, long) => {
     Geolocation.getCurrentPosition(info => console.log(info));
@@ -167,28 +166,13 @@ const [pop, setModal] = useContext(ModalContext);
           "name" : name||"",
           "country_id" : selectedCountry,
           "city_id" : selectedItemsid,
-          "emirates_id": arr[0].IDNumber,
+          "emirates_id": arr[0]['Emirates ID'],
           "nationality" : arr[2].Nationality,
           "driving_license_no" : arr[4].LICENSE_NO,
           "place_of_issue" : arr[5].PLACE_OF_ISSUE,
           "dob" :arr[6].DATE_OF_BIRTH,
           "issue_date" : arr[7].EXPIRY_DATE,
-          "expiry_date":arr[7].EXPIRY_DATE,
-          // "name" :contact?.tradeLicenceName,
-          // "owner_nationality_no" : contact?.emiratesid,
-          // "owner_email" : contact?.email,
-          // "representative_nationality_no" : contact?.representativeEmiratesid,
-          // // "representative_email" :  contact?.representativeEmail,
-          // "merchant_segment_id" : selectedsegment,
-          // "merchant_sub_segment_id" : selectedsubsegment,
-          // "latitude": lat||"0.00",
-          // "longitude" :long|| "0.00",
-          // "country_id" : selectedCountry,
-          // "city_id" : selectedCity,
-          // "address": address,
-          // on_boarded:true,
-          // "vat_filename" : vatFile,
-          // "trade_license_filename" : tradeFile
+          "expiry_date":arr[8].ISSUE_DATE,
         }
         console.log({data})
         const response = await API_CALLS.salesOnboarding(data);

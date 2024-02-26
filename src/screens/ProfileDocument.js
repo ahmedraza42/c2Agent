@@ -351,7 +351,7 @@ const ProfileDocument = ({ navigation, route }) => {
     return tradeData?.map((item,index)=>{
       return(
 <View >
-<Text style={styles.emailPassword}>{item.keyName}</Text>
+<Text style={{...styles.emailPassword,marginBottom:moderateScale(4),marginTop:moderateScale(6)}}>{item.keyName}</Text>
           <Input
             editable={false}
             value={item.value}

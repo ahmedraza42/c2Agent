@@ -102,10 +102,11 @@ const Signup = ({ navigation, route }) => {
     //   showToast("Phone number is required");
     //   return;
     // }
-    else if (password.trim() === "") {
+     if (password.trim() === "") {
       showToast("Password is required");
       return;
-    } else if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)) {
+    } 
+     if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)) {
       showToast(
         "Must contain atleast one number , uppercase and lowercase letter and 8 characters long"
       );

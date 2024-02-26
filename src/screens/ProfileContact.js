@@ -270,11 +270,7 @@ console.log({emiratesData})
       if(!isEmpty(res.data)){
         let arr = [];
         for (let key in res?.data) {
-          console.log('feres.data[key]fdf',res.data[key].key)
-          console.log('feres.data[key]fdf',res.data[key].value)
-          // console.log('res?.data?.key',res?.data?.key)
-          // console.log('res?.data',res?.data)
-          arr.push({keyName:res.data[key].key,value: res.data[key].value});
+          arr.push({keyName:res.data[key].key,value: res.data[key].value,label:res.data[key].label});
       }
       console.log({arr})
         setTradeData(arr)
@@ -378,7 +374,7 @@ const gotoMerchantPage=async()=>{
     return tradeData?.map((item,index)=>{
       return(
 <View>
-<Text style={styles.emailPassword}>{item.keyName}</Text>
+<Text style={{...styles.emailPassword,marginBottom:moderateScale(4),marginTop:moderateScale(6)}}>{item.label}</Text>
           <Input
             editable={false}
             multiline={true}

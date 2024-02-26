@@ -73,7 +73,8 @@ const Login = ({ navigation, route }) => {
         showToast("Invalid Phone Number");
         return;
       }
-    } else if (password.trim() === "") {
+    } 
+     if (password.trim() === "") {
       showToast('Password is required"');
       return;
     }
@@ -91,7 +92,9 @@ const Login = ({ navigation, route }) => {
     
       if (response?.status == true) {
         await saveItemToStorage("current_user", response.data);
-        await _tokenStorageService.setAccessToken(response?.data?.token);
+        await _tokenStorageService.setAccessToken(response?.data?.token)
+        console.log('response.data.path',response.data.path);
+        await saveItemToStorage("qrcode", response.data.path);
         await _tokenStorageService.setRefreshToken(
           response?.data?.refreshToken
         );
