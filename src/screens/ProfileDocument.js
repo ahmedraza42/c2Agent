@@ -321,7 +321,7 @@ const ProfileDocument = ({ navigation, route }) => {
 
   takePicture = async () => {
     if (cameraRef?.current) {
-      const options = { quality: 0.6, base64: true };
+      const options = { quality: 1, base64: true };
       const data = await cameraRef?.current.takePictureAsync(options);
       if(selectedImageIndex==0){
         const fileName = data.uri.split("/").pop();
