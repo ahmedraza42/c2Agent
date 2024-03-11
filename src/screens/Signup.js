@@ -150,7 +150,7 @@ const Signup = ({ navigation, route }) => {
     <View style={styles.container}>
       <View style={styles.iconView}>
         <Image
-          source={require("../assets/icons/loginIcon.png")}
+          source={require("../assets/icons/round.png")}
           style={styles.icon}
           resizeMode="contain"
         />
