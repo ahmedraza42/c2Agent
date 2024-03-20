@@ -27,7 +27,7 @@ import DocumentPicker, {
 import { uploadImage } from "../services/reusableApis";
 import Modal from "react-native-modal";
 import MyCamera from "../components/MyCamera";
-import { getItemFromStorage } from "../utils/storage";
+import { getItemFromStorage, saveItemToStorage } from "../utils/storage";
 import API_CALLS from "../services/constants";
 import { ModalContext } from "../context/ModalContext";
 import { LoaderContext } from "../context/LoaderContext";
@@ -72,8 +72,16 @@ const ProfileDocument = ({ navigation, route }) => {
     setModalVisible(!isModalVisible);
   };
   useEffect(()=>{
-   
-  },[])
+    getData();
+    },[])
+    const getData=async()=>{
+      let trade =await getItemFromStorage('emirateData')
+      console.log({trade})
+      if(trade != null && trade?.length>0){
+        setTradeData(trade)
+        setShowOcrData(true)
+      }
+    }
   const sendImage = async (type, filename, uri, key) => {
     if (uri == "") {
       showToast("Trade License is required");
@@ -97,11 +105,13 @@ const ProfileDocument = ({ navigation, route }) => {
         const res = await API_CALLS.ocr(data);
         if (res.status == true) {
           setDataFileName(res?.data?.trade_license?.filename)
+          saveItemToStorage('tradeFile',res?.data?.trade_license?.filename)
           let arr = [];
           for (let key in res?.data?.trade_license?.data) {
             arr.push({keyName:key,value: res.data.trade_license?.data[key]});
         }
           setTradeData(arr)
+          saveItemToStorage('tradeData',arr)
           setShowOcrData(true)
           setBtnloading(false);
         } else {
@@ -247,13 +257,11 @@ const ProfileDocument = ({ navigation, route }) => {
       if(!isEmpty(res.data)){
         let arr = [];
         for (let key in res?.data) {
-          console.log('feres.data[key]fdf',res.data[key])
-          console.log('res?.data?.key',res?.data?.key)
-          console.log('res?.data',res?.data)
           arr.push({keyName:key,value: res.data[key]});
       }
       console.log({arr})
         setTradeData(arr)
+        saveItemToStorage('emirateData',arr)
         setShowOcrData(true)
         setBtnloading(false);
         let imageArrayCopy = [...imageArray];

@@ -31,7 +31,7 @@ import DocumentPicker, {
 import { uploadImage } from "../services/reusableApis";
 import Modal from "react-native-modal";
 import MyCamera from "../components/MyCamera";
-import { getItemFromStorage } from "../utils/storage";
+import { getItemFromStorage, saveItemToStorage } from "../utils/storage";
 import API_CALLS from "../services/constants";
 import { ModalContext } from "../context/ModalContext";
 import { LoaderContext } from "../context/LoaderContext";
@@ -71,8 +71,16 @@ console.log({emiratesData})
     setModalVisible(!isModalVisible);
   };
   useEffect(()=>{
-   
-  },[])
+    getData();
+    },[])
+    const getData=async()=>{
+      let trade =await getItemFromStorage('drivingData')
+      console.log({trade})
+      if(trade != null && trade?.length>0){
+        setTradeData(trade)
+        setShowOcrData(true)
+      }
+    }
 
   const sendImage = async (type, filename, uri, key) => {
     if (uri == "") {
@@ -274,6 +282,7 @@ console.log({emiratesData})
       }
       console.log({arr})
         setTradeData(arr)
+        saveItemToStorage('drivingData',arr)
         setShowOcrData(true)
         setBtnloading(false);
         let imageArrayCopy = [...imageArray];
@@ -343,23 +352,6 @@ console.log({emiratesData})
 
 
 const gotoMerchantPage=async()=>{
-  // if (Platform.OS === "android" && !(await requestLocationPermission())) {
-  //   Alert.alert(
-  //     "Location permission not granted ",
-  //     "Please goto app settings and grant the location permission",
-  //     [
-  //       {
-  //         text: "Cancel",
-  //         onPress: () => console.log("Cancel Pressed"),
-  //         style: "cancel",
-  //       },
-  //       { text: "Goto Settings", onPress: () => Linking.openSettings() },
-  //     ]
-  //   );
-  //   return;
-  //   // showToast("Please goto app settings and grant the location permission")
-  //   // return;
-  // }
   navigation.navigate("ProfileMerchantt",{emiratesData:emiratesData,drivingLisenceData:tradeData});
 }
   const removeTrade = () => {
@@ -549,141 +541,7 @@ const gotoMerchantPage=async()=>{
     </View>
   );
 };
-// const ProfileContact = ({ navigation, route }) => {
-//   let item=route?.params?.item||{};
-// console.log({item})
-// console.log('Company Name',item?.trade_license['Company Name'])
 
-
-//   const [btnloading, setBtnloading] = useState(false);
-//   const [tradeLicenceName, setTradeLicenceName] = useState(item.trade_license['Company Name']||'');
-//   const [emiratesid, setEmiratesid] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [representativeEmiratesid, setRepresentativeEmiratesid] = useState('');
-//   const [representativeEmail, setrepresentativeEmail] = useState('');
-
-//   const gotoMerchant=()=>{
-//     Keyboard.dismiss();
-//     if (tradeLicenceName.trim() === "") {
-//       showToast("Name is required");
-//       return;
-//     } else if (emiratesid.trim() === "") {
-//       showToast('Emirates ID is required"');
-//       return;
-//     }else if (email.trim() === "") {
-//       showToast('Email is required"');
-//       return;
-//     }else if (representativeEmiratesid.trim() === "") {
-//       showToast('Representative Emirates ID is required"');
-//       return;
-//     }else if (representativeEmail.trim() === "") {
-//       showToast('Representative Email is required"');
-//       return;
-//     }
-//     else{
-//       navigation.navigate('ProfileMerchantt',{item:item,contact:{
-//         tradeLicenceName:tradeLicenceName,
-//         emiratesid:emiratesid,
-//         email:email,
-//         representativeEmiratesid:representativeEmiratesid,
-//         representativeEmail:representativeEmail
-
-//       }})
-//     }
-//   }
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.iconView}>
-//         <Image
-//           source={require("../assets/icons/round.png")}
-//           style={styles.icon}
-//           resizeMode="contain"
-//         />
-//         <TouchableOpacity onPress={()=>navigation.goBack()} style={{position:'absolute',top:moderateScale(10),left:moderateScale(10)}}>
-//         <Image
-//               style={{ width: moderateScale(20), height: moderateScale(20) ,marginLeft:moderateScale(5)}}
-//               resizeMode="contain"
-//               source={require("../assets/vectors/backarrow.png")}
-//             />
-//         </TouchableOpacity>
-//       </View>
-//       <View style={styles.container2}>
-      
-//           <Text style={styles.heading}>COMPLETE YOUR PROFILE</Text>
-          
-//         <View style={styles.rowTopView}>
-//         <View style={styles.rowCenter}>
-//         <View style={styles.primaryRound}>
-//                 <Text style={styles.primaryNumber}>1</Text>
-//               </View>
-//           <Text style={styles.categoryText}>Document</Text>
-//           </View>
-
-//           <View style={styles.rowCenter}>
-//           <View style={styles.primaryRound}>
-//                 <Text style={styles.primaryNumber}>2</Text>
-//               </View>
-//           <Text style={styles.categoryText}>Contact Details</Text>
-//           </View>
-
-//           <View style={styles.rowCenter}>
-//           <View style={styles.greyRound}>
-//                 <Text style={styles.greyNumber}>3</Text>
-//               </View>
-//           <Text style={{...styles.categoryText, color:'rgba(21, 21, 21, 0.4)'}}>Merchant</Text>
-//           </View>
-//         </View>
-//         <ScrollView
-//           showsVerticalScrollIndicator={false}
-//           automaticallyAdjustKeyboardInsets={true}
-//           style={{ flex: 1 }}
-//         >
-//          <View style={styles.top10}/>
-//         <Text style={styles.emailPassword}>Name as per Trade License</Text>
-//           <Input
-//             placeholder={"Type Here"}
-//             value={tradeLicenceName}
-//             onChangeText={(v)=>{setTradeLicenceName(v)}}
-//           />
-//            <Text style={styles.emailPassword}>Owner Emirates iD</Text>
-//           <Input
-//             placeholder={"Type Here"}
-//             value={emiratesid}
-//             onChangeText={(v)=>{setEmiratesid(v)}}
-//           />
-//            <Text style={styles.emailPassword}>Owner Email</Text>
-//           <Input
-//             placeholder={"Type Here"}
-//             value={email}
-//             onChangeText={(v)=>{setEmail(v)}}
-//           />
-//            <Text style={styles.emailPassword}>Representative Emirates ID</Text>
-//           <Input
-//             placeholder={"Type Here"}
-//             value={representativeEmiratesid}
-//             onChangeText={(v)=>setRepresentativeEmiratesid(v)}
-//           />
-//            <Text style={styles.emailPassword}>Representative Email</Text>
-//           <Input
-//             placeholder={"Type Here"}
-//             value={representativeEmail}
-//             onChangeText={(v)=>setrepresentativeEmail(v)}
-//           />
-//          <View style={styles.top10}/>
-//           <Button
-//             loading={btnloading}
-//             text={"NEXT"}
-//             onPress={() => {
-//               gotoMerchant()
-//             }}
-//           />
-//           <View style={styles.top10}/>
-//         </ScrollView>
-//       </View>
-//     </View>
-//   );
-// };
 
 export default ProfileContact;
 const styles = StyleSheet.create({
@@ -858,98 +716,4 @@ const styles = StyleSheet.create({
               marginBottom: moderateScale(5),
   }
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     // paddingHorizontal: moderateScale(15),
-//     backgroundColor: colors.white,
-//   },
-//   container2: {
-//     flex: 2,
-//     padding: moderateScale(15),
-//     backgroundColor: colors.white,
-//   },
-//   emailPassword: {
-//     fontFamily: fontFamily.SemiBold,
-//     color: colors.black,
-//     fontSize: moderateScale(14),
-//     marginBottom: moderateScale(4),
-//     marginTop: moderateScale(8),
-//     marginLeft: moderateScale(4),
-//   },
-//   forgetPassword: {
-//     color: colors.input,
-//     fontFamily: fontFamily.SemiBold,
-//     fontSize: moderateScale(14),
-//   },
-//   forgotView: {
-//     marginVertical: moderateScale(13),
-//     alignItems: "flex-end",
-//   },
-//   top20: {
-//     marginTop: moderateScale(20),
-//   },
-//   justifyCenter: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   top10: {
-//     marginTop: moderateScale(10),
-//   },
-//   clickableText: {
-//     color: colors.primary,
-//     fontFamily: fontFamily.Bold,
-//     fontSize: moderateScale(14),
-//     // textDecorationLine: "underline",
-//   },
-//   heading: {
-//     fontFamily: fontFamily.Bold,
-//     fontSize: moderateScale(20),
-//     color: colors.input,
-//   },
-//   goodToSee: {
-//     fontFamily: fontFamily.Medium,
-//     fontSize: moderateScale(13),
-//     color: colors.input,
-//     marginBottom: moderateScale(10),
-//   },
-//   icon: {
-//     width: moderateScale(80),
-//     height: moderateScale(80),
-//   },
-//   iconView: {
-//     flex: 0.5,
-//     backgroundColor: colors.primary,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   primaryRound:{
-//     width:moderateScale(24),height:moderateScale(24),
-//               justifyContent:'center',alignItems:'center',
-//               borderRadius:moderateScale(12),
-//               backgroundColor:colors.primary
-//   },
-//   greyRound:{
-//     width:moderateScale(24),height:moderateScale(24),
-//               justifyContent:'center',alignItems:'center',
-//               borderRadius:moderateScale(12),
-//               backgroundColor:'rgba(237, 237, 237, 1)'
-//   },
-//   primaryNumber:{
-//     fontFamily:fontFamily.Bold,fontSize:moderateScale(15),color:'white'
-//   },
-//   greyNumber:{
-//     fontFamily:fontFamily.Bold,fontSize:moderateScale(15),color:'rgba(21, 21, 21, 0.34)'
-//   },
-//   rowTopView:{
-//     flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginVertical:moderateScale(10)
-//   },
-//   rowCenter:{
-//     flexDirection:'row',alignItems:'center'
-//   },
-//   categoryText:{
-//     marginLeft:moderateScale(5),fontFamily:fontFamily.SemiBold,fontSize:moderateScale(13),
-//   }
-// });
 

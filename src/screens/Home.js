@@ -110,7 +110,8 @@ const Home = ({ navigation, route }) => {
               borderRadius: moderateScale(25),
             }}
             source={{
-              uri: "https://media.istockphoto.com/id/1440149723/photo/happy-man-social-media-phone-and-living-room-relax-typing-smartphone-and-online-communication.jpg?s=2048x2048&w=is&k=20&c=CcX1kHlcOLFpb5Mt1zYZMfujEFpn3a6vMvn3eQmwiVA=",
+              uri: "https://",
+              // uri: "https://media.istockphoto.com/id/1440149723/photo/happy-man-social-media-phone-and-living-room-relax-typing-smartphone-and-online-communication.jpg?s=2048x2048&w=is&k=20&c=CcX1kHlcOLFpb5Mt1zYZMfujEFpn3a6vMvn3eQmwiVA=",
             }}
           />
           <View style={{ marginLeft: moderateScale(10) }}>
