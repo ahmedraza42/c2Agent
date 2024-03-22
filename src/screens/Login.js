@@ -69,13 +69,18 @@ const Login = ({ navigation, route }) => {
     if (phoneInput?.current) {
       const checkValid = phoneInput.current?.isValidNumber(formattedValue);
       console.log({checkValid})
+      if(phoneNumber==''){
+        showToast("Please enter mobile number’")
+        return
+      }
       if (!checkValid) {
         showToast("Invalid Phone Number");
         return;
       }
     } 
+   
      if (password.trim() === "") {
-      showToast('Password is required"');
+      showToast('Please enter password');
       return;
     }
 
@@ -148,7 +153,6 @@ const Login = ({ navigation, route }) => {
           <Text style={styles.emailPassword}>Phone Number</Text>
         <PhoneInput
                   ref={phoneInput}
-                  placeholderTextColor={'red'}
                   defaultValue={phoneNumber}
                   defaultCode={countryCode}
                   layout="second"
@@ -173,7 +177,7 @@ const Login = ({ navigation, route }) => {
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>Password</Text>
             <PasswordInput
-              placeholder="Enter Password"
+              placeholder="*********"
               value={password}
               changeText={(text) => setPassword(text)}
             />

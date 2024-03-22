@@ -224,7 +224,7 @@ const Signup = ({ navigation, route }) => {
                 fontFamily: fontFamily.Medium,
               }}
             >
-              Dont have an account?{" "}
+              Already have an account?{" "}
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={styles.clickableText}>Login</Text>
