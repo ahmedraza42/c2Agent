@@ -70,7 +70,7 @@ const Login = ({ navigation, route }) => {
       const checkValid = phoneInput.current?.isValidNumber(formattedValue);
       console.log({checkValid})
       if(phoneNumber==''){
-        showToast("Please enter mobile number’")
+        showToast("Please enter mobile number")
         return
       }
       if (!checkValid) {

@@ -86,26 +86,19 @@ const Signup = ({ navigation, route }) => {
     var validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (phoneInput?.current) {
       const checkValid = phoneInput.current?.isValidNumber(formattedValue);
+      if(phoneNumber==''){
+        showToast("Please enter mobile number")
+        return
+      }
       if (!checkValid) {
         showToast("Invalid Phone Number");
         return;
       }
     }
-    // if (accountName.trim() === "") {
-    //   showToast("Account Name is required");
-    //   return;
-    // }
-    // else if (!email.match(validEmailRegex)) {
-    //   showToast("Invalid Email");
-    //   return;
-    // } else if (phoneNumber.length == 0) {
-    //   showToast("Phone number is required");
-    //   return;
-    // }
-     if (password.trim() === "") {
-      showToast("Password is required");
+    if (password.trim() === "") {
+      showToast('Please enter password');
       return;
-    } 
+    }
      if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)) {
       showToast(
         "Must contain atleast one number , uppercase and lowercase letter and 8 characters long"
@@ -202,7 +195,7 @@ const Signup = ({ navigation, route }) => {
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>Password</Text>
             <PasswordInput
-              placeholder="Enter Password"
+              placeholder="*********"
               value={password}
               changeText={(text) => setPassword(text)}
             />
