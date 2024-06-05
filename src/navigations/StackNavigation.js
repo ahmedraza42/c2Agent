@@ -38,6 +38,8 @@ import ScratchCardPage from "../screens/ScratchCard";
 import AllProducts from "../screens/AllProducts";
 import SearchScreen from "../screens/SearchScreen";
 import Qrcode from "../screens/Qrcode";
+import Commission from "../screens/Commission";
+import Commission2 from "../screens/Commission2";
 const DrawerBuyer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -313,6 +315,16 @@ export const BottomTabs = (props) => {
       <HomeStack.Screen
         name="Qrcode"
         component={Qrcode}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Commission"
+        component={Commission}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Commission2"
+        component={Commission2}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen

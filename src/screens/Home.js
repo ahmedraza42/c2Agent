@@ -150,6 +150,18 @@ const Home = ({ navigation, route }) => {
             />
           </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Commission");
+            }}
+          >
+            <Image
+              source={require("../assets/vectors/qrView.png")}
+              resizeMode="contain"
+              style={{ height: moderateScale(110), width: "100%" }}
+            />
+          </TouchableOpacity>
+
           <View style={{ height: moderateScale(160) }} />
         </ScrollView>
       </View>
