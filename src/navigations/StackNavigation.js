@@ -40,6 +40,7 @@ import SearchScreen from "../screens/SearchScreen";
 import Qrcode from "../screens/Qrcode";
 import Commission from "../screens/Commission";
 import Commission2 from "../screens/Commission2";
+import Earnings from "../screens/Earnings";
 const DrawerBuyer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -325,6 +326,11 @@ export const BottomTabs = (props) => {
       <HomeStack.Screen
         name="Commission2"
         component={Commission2}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Earnings"
+        component={Earnings}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen

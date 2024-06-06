@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet ,View} from 'react-native';
+import { Image, ScrollView, StyleSheet ,TouchableOpacity,View} from 'react-native';
 import { fontFamily } from '../theme/Fonts';
 import { moderateScale } from 'react-native-size-matters';
 import colors from '../theme/Colors';
@@ -11,18 +11,23 @@ import Loader from '../components/Loader';
 import { showToast } from '../components/Toast';
 import Input from '../components/Input';
 import { ModalContext } from '../context/ModalContext';
+import { ProfileContext } from '../context/ProfileContext';
 
 const Commission2=({ navigation, route })=> {
     let id = route.params.item||null
+    console.log({id})
+    const [userProfile, setUserProfile] = useContext(ProfileContext);
     const [loading, setLoading] = useState(true);
+    const [btnloading, setBtnLoading] = useState(false);
     const [payments, setPayment] = React.useState([]);
     const [checked, setChecked] = React.useState(id);
     const [commission, setCommission] = React.useState([]);
-    const [acountname, setAcountNumber] = React.useState('');
+    const [acountname, setAcountName] = React.useState('');
     const [accountNumber, setAccountNumber] = React.useState('');
     const [bankName, setBankName] = React.useState('');
     const [iban, setiban] = React.useState('');
     const [pop, setModal] = useContext(ModalContext);
+    console.log({userProfile})
     useEffect(() => {
         callHomeApis();
       }, []);
@@ -58,35 +63,104 @@ const Commission2=({ navigation, route })=> {
         }
       };
 
-      const navigateToNextPage=()=>{
+      const navigateToNextPage=async()=>{
         console.log("fdfds")
         if(checked==null){
          showToast("Please select payment method")
          return
         }
-        navigation.navigate("Homes")
-        setModal((state) => ({
-            ...state,
-            heading: "Commission Setup Complete",
-            subHeading: "Your account setup is now complete",
-            visible: true,
-            // gotoHome: true,
-          }));
-        
+        if(acountname==''){
+          showToast("Account name is required")
+          return
+         }
+         if(accountNumber.length!=16){
+          showToast("Account number is invalid")
+          return
+         }
+         if(accountNumber==''){
+          showToast("Account number is required")
+          return
+         }
+         if(bankName==''){
+          showToast("Bank name is required")
+          return
+         }
+         if(iban==''){
+          showToast("IBAN is required")
+          return
+         }
+         if(iban.length!=23){
+          showToast("IBAN is invalid")
+          return
+         }
+        let data={
+          user_id:userProfile.id,
+          "payment_method_id": checked,
+          "account_name":  checked==4?null:acountname,
+          "account_number": checked==4?null:accountNumber,
+          "bank_name": checked==4?null:bankName,
+          "iban_no":checked==4?null:iban,
+        };
+        setBtnLoading(true)
+        try {
+          const response = await API_CALLS.updateBankDetails(data);
+          console.log("updateBankDetails", response);
+          if (response.status === true) {
+            setBtnLoading(false)
+            navigation.navigate("Homes")
+            setModal((state) => ({
+                ...state,
+                heading: "Commission Setup Complete",
+                subHeading: "Your account setup is now complete",
+                visible: true,
+                // gotoHome: true,
+              }));
+          }
+        } catch (error) {
+          setBtnLoading(false)
+          console.log("getPaymentMethods error", error);
+        }  
       }
+
+      const renderHeader = () => {
+        return (
+          <View style={styles.header}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Image
+                  style={styles.backArrow}
+                  resizeMode="contain"
+                  source={require("../assets/vectors/arrowBackBlack.png")}
+                />
+              </TouchableOpacity>
+              <Text
+                style={{
+                  marginLeft: moderateScale(15),
+                  fontFamily: fontFamily.Bold,
+                  fontSize: moderateScale(15),
+                  color: colors.white,
+                }}
+              >
+                Commission
+              </Text>
+            </View>
+          </View>
+        );
+      };
       console.log({commission})
       if (loading) {
         return <Loader />;
       }
   return (
     <View style={styles.container}>
-      <View style={styles.iconView}>
+    {renderHeader()}
+      {/* <View style={styles.iconView}>
         <Image
           source={require("../assets/icons/round.png")}
           style={styles.icon}
           resizeMode="contain"
         />
-      </View>
+      </View> */}
      <Text style={{textAlign:'center',marginVertical:moderateScale(10),fontFamily:fontFamily.Bold,fontSize:moderateScale(22)}}>SALES COMMISSION</Text>
      <Text style={{textAlign:'center',marginBottom:moderateScale(10),fontFamily:fontFamily.Medium,fontSize:moderateScale(16)}}>How will you like to receive your sales commission</Text>
 <ScrollView>
@@ -121,48 +195,67 @@ const Commission2=({ navigation, route })=> {
         
         })}
 
-       
-        <View style={styles.top10}>
+       {checked!=4? <>
+       <View style={styles.top10}>
             <Text style={styles.emailPassword}>Account Name</Text>
             <Input
               placeholder="Type here"
-              value={''}
-              changeText={(text) => {}}
+              value={acountname}
+              onChangeText={(text) => setAcountName(text)}
             />
           </View>
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>Account Number</Text>
             <Input
               placeholder="Type here"
-              value={''}
-              changeText={(text) => {}}
+              value={accountNumber}
+              onChangeText={(text) => {
+                if (text?.length < 17) {
+                  setAccountNumber(text.replace(/[^0-9]/g, ""));
+                }
+                }}
             />
           </View>
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>Bank Name</Text>
             <Input
               placeholder="Type here"
-              value={''}
-              changeText={(text) => {}}
+              value={bankName}
+              onChangeText={(text) => {
+                setBankName(text.replace(
+                    /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~1234567890]/gi,
+                    ""
+                  ));
+                }}
             />
           </View>
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>IBAN</Text>
             <Input
-              placeholder="*********"
-              value={''}
-              changeText={(text) => {}}
+              placeholder="IBAN No"
+              value={iban}
+              onChangeText={(text) => {
+                if (text?.length < 24) {
+                  setiban(text.replace(
+                    /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/gi,
+                    ""
+                  ))}}
+                }
+               
             />
           </View>
           <View style={styles.top10}/>
-     <Button
-            // loading={loading}
+   
+       </>:null}
+       <Button
+            loading={btnloading}
             text={"NEXT"}
             onPress={() => {
            navigateToNextPage()
             }}
           />
           <View style={{height:moderateScale(20)}}/>
+       
 </View>
 </ScrollView>
 
@@ -225,5 +318,18 @@ const styles = StyleSheet.create({
         fontSize: moderateScale(14),
         marginBottom: moderateScale(4),
         marginLeft: moderateScale(4),
+      },
+      header: {
+        width: "100%",
+        height: moderateScale(60),
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingHorizontal: moderateScale(10),
+        backgroundColor: colors.primary,
+      },
+      backArrow: {
+        width: moderateScale(22),
+        height: moderateScale(22),
       },
   });

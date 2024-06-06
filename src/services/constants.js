@@ -20,6 +20,8 @@ export const API_URLS = {
   getProfile: `${BASE_URL}/user-details`,
   getPaymentMethods: `${BASE_URL}/list/sales_agent/payment_methods`,
   commissionStructure: `${BASE_URL}/get_sales_agent_commission_structure`,
+  updateBankDetails: `${BASE_URL}/sales_agents_bank_details/`,
+  earningDashboard: `${BASE_URL}/sales_agent/dashboard`,
 
   forgetPass: `${BASE_URL}/forget_password`,
   verifyOtp: `${BASE_URL}/verify_otp`,
@@ -52,6 +54,8 @@ const getProfile = (data) => get(API_URLS.getProfile);
 const merchantOnboarding = (data) => post(API_URLS.merchantOnboarding,data);
 const getPaymentMethods = (data) => get(API_URLS.getPaymentMethods);
 const commissionStructure = (data) => get(API_URLS.commissionStructure);
+const updateBankDetails = (data) => post(API_URLS.updateBankDetails,data);
+const earningDashboard = (data) => get(API_URLS.earningDashboard);
 
 const getUserProfile = (data) => post(API_URLS.getUserProfile, data);
 const popularProducts = (data) => get(API_URLS.popularProducts+data);
@@ -84,6 +88,8 @@ const API_CALLS = {
   search,
   suggestion,
   getPaymentMethods,
-  commissionStructure
+  commissionStructure,
+  updateBankDetails,
+  earningDashboard
 };
 export default API_CALLS;

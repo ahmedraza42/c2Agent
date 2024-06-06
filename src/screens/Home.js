@@ -45,17 +45,6 @@ const Home = ({ navigation, route }) => {
     setLoading(false);
   };
 
-  const getPopularProducts = async () => {
-    try {
-      const response = await API_CALLS.popularProducts(`?page_no=${1}`);
-      if (response.status === true) {
-        console.log("getPopularProducts", response);
-        setProduct(response.data || []);
-      }
-    } catch (error) {
-      console.log("getPopularProducts error", error);
-    }
-  };
   const getProfile = async () => {
     try {
       const response = await API_CALLS.getProfile();
@@ -161,7 +150,17 @@ const Home = ({ navigation, route }) => {
               style={{ height: moderateScale(110), width: "100%" }}
             />
           </TouchableOpacity>
-
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Earnings");
+            }}
+          >
+            <Image
+              source={require("../assets/vectors/qrView.png")}
+              resizeMode="contain"
+              style={{ height: moderateScale(110), width: "100%" }}
+            />
+          </TouchableOpacity>
           <View style={{ height: moderateScale(160) }} />
         </ScrollView>
       </View>

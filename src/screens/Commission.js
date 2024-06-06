@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet ,View} from 'react-native';
+import { Image, ScrollView, StyleSheet ,TouchableOpacity,View} from 'react-native';
 import { fontFamily } from '../theme/Fonts';
 import { moderateScale } from 'react-native-size-matters';
 import colors from '../theme/Colors';
@@ -59,19 +59,44 @@ const Commission=({ navigation, route })=> {
         navigation.navigate('Commission2',{item:checked})
         
       }
-      console.log({commission})
+      const renderHeader = () => {
+        return (
+          <View style={styles.header}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Image
+                  style={styles.backArrow}
+                  resizeMode="contain"
+                  source={require("../assets/vectors/arrowBackBlack.png")}
+                />
+              </TouchableOpacity>
+              <Text
+                style={{
+                  marginLeft: moderateScale(15),
+                  fontFamily: fontFamily.Bold,
+                  fontSize: moderateScale(15),
+                  color: colors.white,
+                }}
+              >
+                Commission
+              </Text>
+            </View>
+          </View>
+        );
+      };
       if (loading) {
         return <Loader />;
       }
   return (
     <View style={styles.container}>
-      <View style={styles.iconView}>
+    {renderHeader()}
+      {/* <View style={styles.iconView}>
         <Image
           source={require("../assets/icons/round.png")}
           style={styles.icon}
           resizeMode="contain"
         />
-      </View>
+      </View> */}
      <Text style={{textAlign:'center',marginVertical:moderateScale(10),fontFamily:fontFamily.Bold,fontSize:moderateScale(22)}}>SALES COMMISSION</Text>
      <Text style={{textAlign:'center',marginBottom:moderateScale(10),fontFamily:fontFamily.Medium,fontSize:moderateScale(16)}}>How will you like to receive your sales commission</Text>
 <ScrollView>
@@ -190,6 +215,19 @@ const styles = StyleSheet.create({
       paymentText: {
         fontSize: moderateScale(14),
         fontFamily: fontFamily.Bold,
+      },
+      header: {
+        width: "100%",
+        height: moderateScale(60),
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingHorizontal: moderateScale(10),
+        backgroundColor: colors.primary,
+      },
+      backArrow: {
+        width: moderateScale(22),
+        height: moderateScale(22),
       },
 
   });
