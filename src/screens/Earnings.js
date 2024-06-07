@@ -84,7 +84,7 @@ const Earnings=({ navigation, route })=> {
         return(
             <View style={styles.firstBox}>
             <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(10),color:'rgba(252, 103, 1, 1)'}}>{"Total"}</Text>
-            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(14)}}>{item.value}</Text>
+            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(13)}}>{item.value}</Text>
             <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(12)}}>{item.key}</Text>
             </View>
            
@@ -96,8 +96,8 @@ const Earnings=({ navigation, route })=> {
       {data[0]?.merchant_onboarded.map((item,index)=>{
         return(
             <View style={styles.secondBox}>
-            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(14)}}>{item.value||"0"}</Text>
-            <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(12)}}>{item.key}</Text>
+            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16),color:'rgba(252, 103, 1, 1)'}}>{item.value||"0"}</Text>
+            <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(12),color:'rgba(1, 1, 1, 0.4)'}}>{item.key}</Text>
             </View>
             
            
@@ -109,8 +109,9 @@ const Earnings=({ navigation, route })=> {
       {data[0]?.sales_commission_earned.map((item,index)=>{
         return(
             <View style={styles.secondBox}>
-            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(14)}}>{item.value||"0"}</Text>
-            <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(12)}}>{item.key}</Text>
+            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(15),color:'rgba(252, 103, 1, 1)'}}>{"AED"}</Text>
+            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16),color:'rgba(252, 103, 1, 1)'}}>{item.value||"0"}</Text>
+            <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(12),color:'rgba(1, 1, 1, 0.4)'}}>{item.key}</Text>
             </View>  
         )
       })}

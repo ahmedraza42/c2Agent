@@ -97,8 +97,8 @@ const Commission=({ navigation, route })=> {
           resizeMode="contain"
         />
       </View> */}
-     <Text style={{textAlign:'center',marginVertical:moderateScale(10),fontFamily:fontFamily.Bold,fontSize:moderateScale(22)}}>SALES COMMISSION</Text>
-     <Text style={{textAlign:'center',marginBottom:moderateScale(10),fontFamily:fontFamily.Medium,fontSize:moderateScale(16)}}>How will you like to receive your sales commission</Text>
+     <Text style={{textAlign:'center',marginVertical:moderateScale(8),fontFamily:fontFamily.Bold,fontSize:moderateScale(20)}}>SALES COMMISSION</Text>
+     <Text style={{textAlign:'center',marginBottom:moderateScale(10),fontFamily:fontFamily.Medium,fontSize:moderateScale(14)}}>How will you like to receive your sales commission</Text>
 <ScrollView>
 <View style={{paddingHorizontal:moderateScale(10)}}>
 {payments.map((item, index) => {
@@ -132,9 +132,9 @@ const Commission=({ navigation, route })=> {
         })}
 
         <View>
-            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(20)}}>Commission Structure</Text>
-            <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(14)}}>30 Days Rolling</Text>
-            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginVertical:moderateScale(5)}}>
+            <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(20),marginTop:moderateScale(8)}}>Commission Structure</Text>
+            <Text style={{fontFamily:fontFamily.Medium,fontSize:moderateScale(14),color:'rgba(1, 1, 1, 0.4)'}}>30 Days Rolling</Text>
+            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginVertical:moderateScale(8)}}>
             <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(14)}}>Merchant Onboarded</Text>
             <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(14)}}>Per Onboarding</Text>
             </View>
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 3,
-      marginVertical: moderateScale(10),
+      marginVertical: moderateScale(8),
       borderRadius: moderateScale(12),
       padding:moderateScale(10),
         flexDirection: "row",

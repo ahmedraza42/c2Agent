@@ -162,8 +162,8 @@ const Commission2=({ navigation, route })=> {
           resizeMode="contain"
         />
       </View> */}
-     <Text style={{textAlign:'center',marginVertical:moderateScale(10),fontFamily:fontFamily.Bold,fontSize:moderateScale(22)}}>SALES COMMISSION</Text>
-     <Text style={{textAlign:'center',marginBottom:moderateScale(10),fontFamily:fontFamily.Medium,fontSize:moderateScale(16)}}>How will you like to receive your sales commission</Text>
+      <Text style={{textAlign:'center',marginVertical:moderateScale(8),fontFamily:fontFamily.Bold,fontSize:moderateScale(20)}}>SALES COMMISSION</Text>
+     <Text style={{textAlign:'center',marginBottom:moderateScale(10),fontFamily:fontFamily.Medium,fontSize:moderateScale(14)}}>How will you like to receive your sales commission</Text>
 <ScrollView>
 <View style={{paddingHorizontal:moderateScale(10)}}>
 {payments.map((item, index) => {
@@ -233,7 +233,7 @@ const Commission2=({ navigation, route })=> {
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>IBAN</Text>
             <Input
-              placeholder="IBAN No"
+              placeholder="Type here"
               value={iban}
               onChangeText={(text) => {
                 if (text?.length < 24) {
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 3,
-      marginVertical: moderateScale(10),
+      marginVertical: moderateScale(8),
       borderRadius: moderateScale(12),
       padding:moderateScale(10),
         flexDirection: "row",
