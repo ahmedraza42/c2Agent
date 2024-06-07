@@ -69,27 +69,27 @@ const Commission2=({ navigation, route })=> {
          showToast("Please select payment method")
          return
         }
-        if(acountname==''){
+        if(checked!=4&&acountname==''){
           showToast("Account name is required")
           return
          }
-         if(accountNumber.length!=16){
+         if(checked!=4&&accountNumber.length!=16){
           showToast("Account number is invalid")
           return
          }
-         if(accountNumber==''){
+         if(checked!=4&&accountNumber==''){
           showToast("Account number is required")
           return
          }
-         if(bankName==''){
+         if(checked!=4&&bankName==''){
           showToast("Bank name is required")
           return
          }
-         if(iban==''){
+         if(checked!=4&&iban==''){
           showToast("IBAN is required")
           return
          }
-         if(iban.length!=23){
+         if(checked!=4&&iban.length!=23){
           showToast("IBAN is invalid")
           return
          }
@@ -107,7 +107,7 @@ const Commission2=({ navigation, route })=> {
           console.log("updateBankDetails", response);
           if (response.status === true) {
             setBtnLoading(false)
-            navigation.navigate("Homes")
+            
             setModal((state) => ({
                 ...state,
                 heading: "Commission Setup Complete",
@@ -115,6 +115,7 @@ const Commission2=({ navigation, route })=> {
                 visible: true,
                 // gotoHome: true,
               }));
+              navigation.navigate("Homes")
           }
         } catch (error) {
           setBtnLoading(false)

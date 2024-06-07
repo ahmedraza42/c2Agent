@@ -20,7 +20,7 @@ export const API_URLS = {
   getProfile: `${BASE_URL}/user-details`,
   getPaymentMethods: `${BASE_URL}/list/sales_agent/payment_methods`,
   commissionStructure: `${BASE_URL}/get_sales_agent_commission_structure`,
-  updateBankDetails: `${BASE_URL}/sales_agents_bank_details/`,
+  updateBankDetails: `${BASE_URL}/sales_agents_bank_details`,
   earningDashboard: `${BASE_URL}/sales_agent/dashboard`,
 
   forgetPass: `${BASE_URL}/forget_password`,
