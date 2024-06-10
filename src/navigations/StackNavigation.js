@@ -41,6 +41,8 @@ import Qrcode from "../screens/Qrcode";
 import Commission from "../screens/Commission";
 import Commission2 from "../screens/Commission2";
 import Earnings from "../screens/Earnings";
+import Dashboard from "../screens/Dashboard";
+import ReferQr from "../screens/ReferQr";
 const DrawerBuyer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -311,6 +313,16 @@ export const BottomTabs = (props) => {
       <HomeStack.Screen
         name="Homes"
         component={Home}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="ReferQr"
+        component={ReferQr}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
