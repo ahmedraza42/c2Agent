@@ -54,7 +54,7 @@ const Header = ({ showBackButton = true, showDrawerButton = true, name ,showNoti
         
       </View>
 
-      <Image source={require('../assets/drawerBuyerAssets/headerIcon.png')} resizeMode="contain" style={{width:moderateScale(40),height:moderateScale(40)}}/>
+      <Image source={require('../assets/icons/mplace.png')} resizeMode="contain" style={{width:moderateScale(40),height:moderateScale(45)}}/>
       <MaterialIcons name="menu" color={colors.primary} size={moderateScale(30)}/>
     </View>
   );
