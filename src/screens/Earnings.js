@@ -58,7 +58,7 @@ const Earnings=({ navigation, route })=> {
                   color: colors.white,
                 }}
               >
-                Earnings
+                Dashboard
               </Text>
             </View>
           </View>

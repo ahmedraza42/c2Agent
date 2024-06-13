@@ -109,7 +109,7 @@ const Commission=({ navigation, route })=> {
                 <Image
                   style={styles.paymentIcon}
                   resizeMode="contain"
-                  source={{ uri: item?.imagePath }}
+                  source={{ uri: item?.img }}
                 />
                 <Text style={styles.paymentText}>{item?.name}</Text>
               </View>

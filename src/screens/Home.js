@@ -100,7 +100,7 @@ const Home = ({ navigation, route }) => {
           <View style={styles.top10} />
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Dashboard");
+              navigation.navigate("Earnings");
             }}
             style={styles.buttonView}
           >
@@ -167,29 +167,7 @@ const Home = ({ navigation, route }) => {
               style={{ height: moderateScale(30), width:moderateScale(30)}}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Earnings");
-            }}
-            style={styles.buttonView}
-          >
-            <Image
-              source={require("../assets/vectors/line-chart.png")}
-              resizeMode="contain"
-              style={{ height: moderateScale(45), width:moderateScale(45)}}
-            />
-
-            <View style={{marginHorizontal:moderateScale(5)}}>
-              <Text style={styles.firstText}>Refer & Earn</Text>
-              <Text style={styles.secondText}>Share your referral QR code with the onboarding merchant</Text>
-            </View>
-
-            <Image
-              source={require("../assets/vectors/homearrow.png")}
-              resizeMode="contain"
-              style={{ height: moderateScale(30), width:moderateScale(30)}}
-            />
-          </TouchableOpacity>
+          
           <View style={{ height: moderateScale(160) }} />
         </ScrollView>
       </View>
