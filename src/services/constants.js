@@ -23,6 +23,7 @@ export const API_URLS = {
   updateBankDetails: `${BASE_URL}/sales_agents_bank_details`,
   earningDashboard: `${BASE_URL}/sales_agent/dashboard`,
   referalMerchant: `${BASE_URL}/referral/merchant`,
+  leaderboard: `${BASE_URL}/referral/salesagent/leaderboard`,
 
   forgetPass: `${BASE_URL}/forget_password`,
   verifyOtp: `${BASE_URL}/verify_otp`,
@@ -58,6 +59,7 @@ const commissionStructure = (data) => get(API_URLS.commissionStructure);
 const updateBankDetails = (data) => post(API_URLS.updateBankDetails,data);
 const earningDashboard = (data) => get(API_URLS.earningDashboard);
 const referalMerchant = (data) => get(API_URLS.referalMerchant);
+const leaderboard = (data) => get(API_URLS.leaderboard);
 
 const getUserProfile = (data) => post(API_URLS.getUserProfile, data);
 const popularProducts = (data) => get(API_URLS.popularProducts+data);
@@ -93,6 +95,7 @@ const API_CALLS = {
   commissionStructure,
   updateBankDetails,
   earningDashboard,
-  referalMerchant
+  referalMerchant,
+  leaderboard
 };
 export default API_CALLS;

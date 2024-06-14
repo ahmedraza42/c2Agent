@@ -43,6 +43,7 @@ import Commission2 from "../screens/Commission2";
 import Earnings from "../screens/Earnings";
 import Dashboard from "../screens/Dashboard";
 import ReferQr from "../screens/ReferQr";
+import LeaderBoard from "../screens/LeaderBoard";
 const DrawerBuyer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -328,6 +329,11 @@ export const BottomTabs = (props) => {
       <HomeStack.Screen
         name="Qrcode"
         component={Qrcode}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="LeaderBoard"
+        component={LeaderBoard}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
