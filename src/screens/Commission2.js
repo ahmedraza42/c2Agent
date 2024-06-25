@@ -73,14 +73,14 @@ const Commission2=({ navigation, route })=> {
           showToast("Account name is required")
           return
          }
-         if(checked!=4&&accountNumber.length!=16){
-          showToast("Account number is invalid")
-          return
-         }
-         if(checked!=4&&accountNumber==''){
-          showToast("Account number is required")
-          return
-         }
+        //  if(checked!=4&&accountNumber.length!=16){
+        //   showToast("Account number is invalid")
+        //   return
+        //  }
+        //  if(checked!=4&&accountNumber==''){
+        //   showToast("Account number is required")
+        //   return
+        //  }
          if(checked!=4&&bankName==''){
           showToast("Bank name is required")
           return
@@ -97,7 +97,7 @@ const Commission2=({ navigation, route })=> {
           user_id:userProfile.id,
           "payment_method_id": checked,
           "account_name":  checked==4?null:acountname,
-          "account_number": checked==4?null:accountNumber,
+          // "account_number": checked==4?null:accountNumber,
           "bank_name": checked==4?null:bankName,
           "iban_no":checked==4?null:iban,
         };
@@ -205,7 +205,7 @@ const Commission2=({ navigation, route })=> {
               onChangeText={(text) => setAcountName(text)}
             />
           </View>
-          <View style={styles.top10}>
+          {/* <View style={styles.top10}>
             <Text style={styles.emailPassword}>Account Number</Text>
             <Input
               placeholder="Type here"
@@ -216,7 +216,7 @@ const Commission2=({ navigation, route })=> {
                 }
                 }}
             />
-          </View>
+          </View> */}
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>Bank Name</Text>
             <Input
@@ -237,10 +237,7 @@ const Commission2=({ navigation, route })=> {
               value={iban}
               onChangeText={(text) => {
                 if (text?.length < 24) {
-                  setiban(text.replace(
-                    /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/gi,
-                    ""
-                  ))}}
+                    setiban(text.replace(/\s/g, ''))}}
                 }
                
             />

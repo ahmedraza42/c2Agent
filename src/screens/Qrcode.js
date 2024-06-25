@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import Text from "../components/Text";
 import colors from "../theme/Colors";
@@ -9,8 +9,10 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Button from "../components/Button";
 import { getItemFromStorage } from "../utils/storage";
 import { SvgUri } from 'react-native-svg';
+import ViewShot, { captureScreen } from "react-native-view-shot";
+import Share from "react-native-share";
 const Qrcode = ({ navigation }) => {
-
+  let ref = useRef("viewShot");
   const [qr, setQr] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -24,6 +26,33 @@ const Qrcode = ({ navigation }) => {
     setQr(res)
     setLoading(false)
   }
+  const shareSS = async () => {
+   
+    try {
+        // let capture = await captureScreen({
+        //   format: "png",
+        //   quality: 0.6,
+        //   result: "base64",
+        // });
+        let capture = "";
+        let cap = await ref.current?.capture();
+        capture = cap;
+        if (capture) {
+          const shareOption = {
+            message: `Share your referral QR code with the onboarding merchant`,
+            url: "data:image/png;base64," + capture,
+          };
+          const ShareResponse = await Share.open(shareOption);
+        } else {
+          throw "error";
+        }
+      } catch (error) {
+        console.log({ error });
+        if (error === "error") {
+          Alert.alert("Facing issue when share this image please share it manually");
+        }
+      }
+  };
   const renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -62,16 +91,27 @@ const Qrcode = ({ navigation }) => {
       <View
         style={styles.innerContainer}
       >
+       <ViewShot
+          ref={ref}
+          options={{ format: "png", quality: 0.6, result: "base64" }}
+          style={{justifyContent:'center',alignItems:'center'}}
+        >
         {/* <Image
           resizeMode="cover"
           source={{uri:qr}}
           style={{ width: moderateScale(350), height: moderateScale(250) }}
         /> */}
          <SvgUri
-    width={moderateScale(320)}
-    height={moderateScale(250)}
+    width={moderateScale(300)}
+    height={moderateScale(230)}
     uri={qr}
   />
+  </ViewShot>
+  <View style={styles.top10}/>
+  <View style={styles.top10}/>
+  <TouchableOpacity onPress={()=>{shareSS()}} style={{width:'100%',alignSelf:"center",backgroundColor:'rgba(254, 225, 204, 1)',justifyContent:'center',alignItems:'center',height:moderateScale(50),borderRadius:moderateScale(12)}}>
+<Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(13),color:colors.primary}}>SHARE</Text>
+        </TouchableOpacity>
       </View>
       <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingHorizontal:moderateScale(15)}}>
 <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16)}}>Share QR Code</Text>
@@ -101,12 +141,12 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     width: "100%",
-    height: moderateScale(300),
+    // height: moderateScale(300),
     borderRadius: moderateScale(8),
     padding: moderateScale(4),
     marginTop: moderateScale(10),
     backgroundColor: "white",
-    flexDirection: "row",
+    // flexDirection: "row",
     paddingHorizontal: moderateScale(20),
     shadowColor: "rgba(0, 26, 77, 0.5)",
     shadowOpacity: 0.1,
@@ -117,7 +157,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
 
     justifyContent: "space-between",
-    alignItems: "center",
+    // alignItems: "center",
     elevation: 8,
   },
   header: {

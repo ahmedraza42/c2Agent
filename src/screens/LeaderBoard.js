@@ -85,7 +85,7 @@ const LeaderBoard = ({ navigation, route }) => {
     <View style={styles.container}>
       {renderHeader()}
       <View style={{ padding: moderateScale(15) }}>
-        <View
+        {data?.length>0&&<View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -111,7 +111,7 @@ const LeaderBoard = ({ navigation, route }) => {
           >
             Onboarding
           </Text>
-        </View>
+        </View>}
         <FlatList
           data={data}
           keyExtractor={(item,index)=>{`item ${index}`}}
