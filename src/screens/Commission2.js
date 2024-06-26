@@ -90,7 +90,7 @@ const Commission2=({ navigation, route })=> {
           return
          }
          if(checked!=4&&iban.length!=23){
-          showToast("IBAN is invalid")
+          showToast("Please ensure that the IBAN number provided contains exactly 23 characters.")
           return
          }
         let data={
@@ -120,6 +120,7 @@ const Commission2=({ navigation, route })=> {
         } catch (error) {
           setBtnLoading(false)
           console.log("getPaymentMethods error", error);
+          showToast(error?.response?.data?.message||"Something went wrong")
         }  
       }
 
@@ -233,7 +234,7 @@ const Commission2=({ navigation, route })=> {
           <View style={styles.top10}>
             <Text style={styles.emailPassword}>IBAN</Text>
             <Input
-              placeholder="Type here"
+              placeholder="AE07 0331 2345 6789 0123 456"
               value={iban}
               onChangeText={(text) => {
                 if (text?.length < 24) {

@@ -60,9 +60,9 @@ const DrawerContentForBuyer=({})=> {
                 <Text style={styles.firstName}>
                   {!isEmpty(userProfile)? userProfile?.name:'---'}
                 </Text>
-                <TouchableOpacity onPress={() => {navigation.navigate('Profile')}}>
+                {/* <TouchableOpacity onPress={() => {navigation.navigate('Profile')}}>
                   <Text style={styles.email}>Edit Profile</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               
             </View>
 
@@ -84,7 +84,7 @@ const DrawerContentForBuyer=({})=> {
                       try {
                         if (item.title === "Contact Us") {
                           Linking.openURL(
-                            `whatsapp://send?phone=${"03462503955"}&text=${"Hello!!"}`
+                            `whatsapp://send?phone=${"971502258431"}&text=${"Hello!!"}`
                           );
                         } 
                         else if (item.title === "Logout") {

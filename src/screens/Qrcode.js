@@ -93,19 +93,16 @@ const Qrcode = ({ navigation }) => {
       >
        <ViewShot
           ref={ref}
-          options={{ format: "png", quality: 0.6, result: "base64" }}
-          style={{justifyContent:'center',alignItems:'center'}}
+          options={{ format: "png", quality: 1, result: "base64" }}
         >
-        {/* <Image
-          resizeMode="cover"
-          source={{uri:qr}}
-          style={{ width: moderateScale(350), height: moderateScale(250) }}
-        /> */}
-         <SvgUri
-    width={moderateScale(300)}
-    height={moderateScale(230)}
+        <View style={{justifyContent:'center',alignItems:'center',padding:moderateScale(20),backgroundColor:'white'}}>
+        <SvgUri
+    width={moderateScale(280)}
+    height={moderateScale(220)}
     uri={qr}
   />
+        </View>
+         
   </ViewShot>
   <View style={styles.top10}/>
   <View style={styles.top10}/>
@@ -113,7 +110,7 @@ const Qrcode = ({ navigation }) => {
 <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(13),color:colors.primary}}>SHARE</Text>
         </TouchableOpacity>
       </View>
-      <View style={{flex:1,justifyContent:'center',alignItems:'center',paddingHorizontal:moderateScale(15)}}>
+      <View style={{flex:1,marginTop:moderateScale(20),alignItems:'center',paddingHorizontal:moderateScale(15)}}>
 <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16)}}>Share QR Code</Text>
 <Text style={{fontFamily:fontFamily.Medium,paddingHorizontal:moderateScale(40),fontSize:moderateScale(14),textAlign:'center',marginTop:moderateScale(8)}}>Share your referral QR code with the onboarding merchant</Text>
 <View style={styles.top10}/>
