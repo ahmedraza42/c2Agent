@@ -58,6 +58,7 @@ console.log({emiratesData})
   const [_, setModal] = useContext(LoaderContext);
   const [dataFileName, setDataFileName] = useState('');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [drivingBackend, setDrivingBackend] = useState({});
   const [imageArray, setImageArray] = useState([
     {
       uri: "",
@@ -75,10 +76,12 @@ console.log({emiratesData})
     },[])
     const getData=async()=>{
       let trade =await getItemFromStorage('drivingData')
+      let drivingData =await getItemFromStorage('drivingDatabackend')
       console.log({trade})
       if(trade != null && trade?.length>0){
         setTradeData(trade)
         setShowOcrData(true)
+        setDrivingBackend(drivingData)
       }
     }
 
@@ -262,7 +265,12 @@ console.log({emiratesData})
       </TouchableOpacity>
     );
   };
-
+  function toObject(arr) {
+    var rv = {};
+    for (var i = 0; i < arr.length; ++i)
+    arr[i].label = arr[i]['value'];
+    return rv;
+  }
   const sendImageFrontToBackend=async(base,uri,file,type)=>{
     console.log({base})
     let data = base
@@ -283,6 +291,14 @@ console.log({emiratesData})
       console.log({arr})
         setTradeData(arr)
         saveItemToStorage('drivingData',arr)
+        // let d=Object.assign({}, res.data);
+        var object = arr.reduce(
+          (obj, item) => Object.assign(obj, { [item.keyName]: item.value }), {});
+        
+        console.log({object})
+        
+        saveItemToStorage('drivingDatabackend',object)
+        setDrivingBackend(object)
         setShowOcrData(true)
         setBtnloading(false);
         let imageArrayCopy = [...imageArray];
@@ -352,7 +368,7 @@ console.log({emiratesData})
 
 
 const gotoMerchantPage=async()=>{
-  navigation.navigate("ProfileMerchantt",{emiratesData:emiratesData,drivingLisenceData:tradeData});
+  navigation.navigate("ProfileMerchantt",{emiratesData:emiratesData,drivingLisenceData:drivingBackend});
 }
   const removeTrade = () => {
     setImageTypeTrade(""), setImageFileNameTrade(""), setImageUriTrade("");

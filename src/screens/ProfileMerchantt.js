@@ -31,7 +31,8 @@ import { isEmpty } from "lodash";
 const ProfileMerchantt = ({ navigation, route }) => {
   let emiratesData = route.params.emiratesData || {};
   let drivingLisenceData = route.params.drivingLisenceData || {};
-
+console.log({emiratesData})
+console.log({drivingLisenceData})
   let arr = [];
   if (!isEmpty(emiratesData)) {
     for (let key in emiratesData) {
@@ -57,7 +58,7 @@ const ProfileMerchantt = ({ navigation, route }) => {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedItemsid, setSelectedItemsid] = useState([]);
-  const [name, setName] = useState(arr[1]?.Name || "");
+  const [name, setName] = useState(emiratesData.Name || "");
   useEffect(() => {
     getSetting();
   }, []);
@@ -93,16 +94,19 @@ const ProfileMerchantt = ({ navigation, route }) => {
           name: name || "",
           country_id: selectedCountry,
           city_id: selectedItemsid,
-          emirates_id: arr[0]["Emirates ID"],
-          nationality: arr[2].Nationality,
-          driving_license_no: arr[4].LICENSE_NO,
-          place_of_issue: arr[5].PLACE_OF_ISSUE,
-          dob: arr[6].DATE_OF_BIRTH,
-          issue_date: arr[7].EXPIRY_DATE,
-          expiry_date: arr[8].ISSUE_DATE,
+          emirates_id:emiratesData,
+          driving_license:drivingLisenceData
+          // emirates_drivingLisence_data:arr,
+          // emirates_id: arr[0]["Emirates ID"],
+          // nationality: arr[2].Nationality,
+          // driving_license_no: arr[4].LICENSE_NO,
+          // place_of_issue: arr[5].PLACE_OF_ISSUE,
+          // dob: arr[6].DATE_OF_BIRTH,
+          // issue_date: arr[7].EXPIRY_DATE,
+          // expiry_date: arr[8].ISSUE_DATE,
         };
         console.log({ data });
-        const response = await API_CALLS.salesOnboarding(data);
+        const response = await API_CALLS.salesOnboardingv2(data);
         console.log({ response });
         if (response.status === true) {
           // showToast(response.message||'Merchant Added')

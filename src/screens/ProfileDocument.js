@@ -52,6 +52,7 @@ const ProfileDocument = ({ navigation, route }) => {
   const [dataFileName, setDataFileName] = useState('');
   const [_, setModal] = useContext(LoaderContext);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [emirateBackend, setEmirateBackend] = useState({});
   const [imageArray, setImageArray] = useState([
     {
       uri: "",
@@ -76,10 +77,12 @@ const ProfileDocument = ({ navigation, route }) => {
     },[])
     const getData=async()=>{
       let trade =await getItemFromStorage('emirateData')
-      console.log({trade})
+      let tradebackend =await getItemFromStorage('emirateDataBackend')
+      console.log({tradebackend})
       if(trade != null && trade?.length>0){
         setTradeData(trade)
         setShowOcrData(true)
+        setEmirateBackend(tradebackend)
       }
     }
   const sendImage = async (type, filename, uri, key) => {
@@ -104,14 +107,18 @@ const ProfileDocument = ({ navigation, route }) => {
       try {
         const res = await API_CALLS.ocr(data);
         if (res.status == true) {
+         
           setDataFileName(res?.data?.trade_license?.filename)
           saveItemToStorage('tradeFile',res?.data?.trade_license?.filename)
           let arr = [];
+          console.log('res?.data?.trade_license?.data',res?.data?.trade_license?.data)
           for (let key in res?.data?.trade_license?.data) {
             arr.push({keyName:key,value: res.data.trade_license?.data[key]});
         }
           setTradeData(arr)
           saveItemToStorage('tradeData',arr)
+          setEmirateBackend(res.data)
+          console.log('ressssss',arr)
           setShowOcrData(true)
           setBtnloading(false);
         } else {
@@ -253,7 +260,7 @@ const ProfileDocument = ({ navigation, route }) => {
         visible: true,
         }));
       const res =await API_CALLS.emiratesFront(data)
-      console.log({res})
+     
       if(!isEmpty(res.data)){
         let arr = [];
         for (let key in res?.data) {
@@ -262,6 +269,9 @@ const ProfileDocument = ({ navigation, route }) => {
       console.log({arr})
         setTradeData(arr)
         saveItemToStorage('emirateData',arr)
+        saveItemToStorage('emirateDataBackend',res.data)
+        console.log('emirateDataBackend',res.data)
+        setEmirateBackend(res.data)
         setShowOcrData(true)
         setBtnloading(false);
         let imageArrayCopy = [...imageArray];
@@ -460,7 +470,7 @@ const ProfileDocument = ({ navigation, route }) => {
             loading={btnloading}
             text={"NEXT"}
             onPress={() => {
-                navigation.navigate("ProfileContact",{item:tradeData});
+                navigation.navigate("ProfileContact",{item:emirateBackend});
             }}
           />}
           <View style={{height:moderateScale(100)}}/>

@@ -16,6 +16,7 @@ export const API_URLS = {
   emiratesFront: `https://8k4zyqfesl.execute-api.us-east-1.amazonaws.com/Prod`,
   drivingLicense: `https://u143e2g4gd.execute-api.us-east-1.amazonaws.com/Prod`,
   salesOnboarding: `${BASE_URL}/sales_agent/onboarding`,
+  salesOnboardingv2: `${BASE_URL}/sales_agent/onboardingv2`,
   getUserProfile: `${BASE_URL}/account/get-profile`,
   getProfile: `${BASE_URL}/user-details`,
   getPaymentMethods: `${BASE_URL}/list/sales_agent/payment_methods`,
@@ -47,6 +48,7 @@ const signup = (data) => post(API_URLS.signup, data);
 const ocr = (data) => post(API_URLS.ocr, data);
 const emiratesFront = (data) => post(API_URLS.emiratesFront, data);
 const salesOnboarding = (data) => post(API_URLS.salesOnboarding, data);
+const salesOnboardingv2 = (data) => post(API_URLS.salesOnboardingv2, data);
 const drivingLicense = (data) => post(API_URLS.drivingLicense, data);
 const forgetPass = (data) => post(API_URLS.forgetPass, data);
 const verifyOtp = (data) => post(API_URLS.verifyOtp, data);
@@ -77,6 +79,7 @@ const API_CALLS = {
   emiratesFront,
   drivingLicense,
   salesOnboarding,
+  salesOnboardingv2,
   forgetPass,
   verifyOtp,
   resetPass,
