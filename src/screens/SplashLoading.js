@@ -84,7 +84,7 @@ const SplashLoading = () => {
       <ActivityIndicator size={"small"} color={colors.input} />
       <View style={styles.textView}>
         <Text style={styles.text}>
-          Copyright © 2024 Colony Food LLC. All rights reserved.
+          Copyright © 2024 mplace agent LLC. All rights reserved.
         </Text>
       </View>
     </View>
