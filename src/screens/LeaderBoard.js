@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
     marginLeft: moderateScale(8),
     fontFamily: fontFamily.Medium,
     fontSize: moderateScale(14),
+    width:moderateScale(170)
   },
   onBoarded:{
     fontFamily: fontFamily.Bold,

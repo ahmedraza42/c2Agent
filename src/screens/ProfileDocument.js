@@ -386,6 +386,13 @@ const ProfileDocument = ({ navigation, route }) => {
           style={styles.icon}
           resizeMode="contain"
         />
+        <TouchableOpacity style={{position:'absolute',top:20,left:20}} onPress={() => navigation.goBack()}>
+                <Image
+                  style={styles.backArrow}
+                  resizeMode="contain"
+                  source={require("../assets/vectors/arrowBackBlack.png")}
+                />
+              </TouchableOpacity>
       </View>
       <View style={styles.container2}>
         {/* <ScrollView
@@ -719,5 +726,9 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Bold,
               fontSize: moderateScale(18),
               marginBottom: moderateScale(5),
-  }
+  },
+  backArrow: {
+    width: moderateScale(22),
+    height: moderateScale(22),
+  },
 });

@@ -112,7 +112,7 @@ const Home = ({ navigation, route }) => {
 
             <View style={{marginHorizontal:moderateScale(5)}}>
               <Text style={styles.firstText}>Dashboard</Text>
-              <Text style={styles.secondText}>Share your referral QR code with the onboarding merchant</Text>
+              <Text style={styles.secondText}>Explore Merchant Onboarding and Earnings</Text>
             </View>
 
             <Image
@@ -158,7 +158,7 @@ const Home = ({ navigation, route }) => {
 
             <View style={{marginHorizontal:moderateScale(5)}}>
               <Text style={styles.firstText}>Commission</Text>
-              <Text style={styles.secondText}>Share your referral QR code with the onboarding merchant</Text>
+              <Text style={styles.secondText}>Explore Commission Structure and Details</Text>
             </View>
 
             <Image
@@ -181,7 +181,7 @@ const Home = ({ navigation, route }) => {
 
             <View style={{marginHorizontal:moderateScale(5)}}>
               <Text style={styles.firstText}>Leaderboard</Text>
-              <Text style={styles.secondText}>Share your referral QR code with the onboarding merchant</Text>
+              <Text style={styles.secondText}>Explore Top Agents and Rankings</Text>
             </View>
 
             <Image

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Image,
   Keyboard,
@@ -16,7 +16,7 @@ import PasswordInput from "../components/PasswordInput";
 import Button from "../components/Button";
 import { UserContext } from "../context/UserContext";
 import { showToast } from "../components/Toast";
-import { saveItemToStorage } from "../utils/storage";
+import { remove, saveItemToStorage } from "../utils/storage";
 import deviceInfoModule from "react-native-device-info";
 import TokenStorageService from "../services/tokenService";
 import API_CALLS from "../services/constants";
@@ -30,7 +30,7 @@ const Login = ({ navigation, route }) => {
   const [_, setUser] = useContext(UserContext);
   const [userCredential, setUserCredential] = useContext(UserCredentialContext);
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("ahmed@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
   const [countryCode, setCountryCode] = useState("AE");
@@ -41,6 +41,23 @@ const Login = ({ navigation, route }) => {
     return `${RandomNumber}@`;
   };
 
+  useEffect(() => {
+   removeOldData()
+  }, [])
+   
+  const removeOldData= async()=>{
+
+    try {
+      await remove('emirateData')
+      await remove('emirateDataBackend')
+      await remove('drivingData')
+      await remove('drivingDatabackend')
+    } catch (error) {
+      
+    }
+ 
+  }
+  
   const checkUserfillAllRequiredDoc = async (loginResponse) => {
     
         if (loginResponse.data.onBoarded == true) {
@@ -210,7 +227,10 @@ const Login = ({ navigation, route }) => {
             >
               Don't have an account?{" "}
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+            <TouchableOpacity onPress={() => {
+              setPassword('')
+              setPhoneNumber('')
+              navigation.navigate("Signup")}}>
               <Text style={styles.clickableText}>Sign Up</Text>
             </TouchableOpacity>
           </View>

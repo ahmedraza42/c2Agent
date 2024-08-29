@@ -65,6 +65,7 @@ const Commission2=({ navigation, route })=> {
 
       const navigateToNextPage=async()=>{
         console.log("fdfds")
+        
         if(checked==null){
          showToast("Please select payment method")
          return
@@ -89,7 +90,7 @@ const Commission2=({ navigation, route })=> {
           showToast("IBAN is required")
           return
          }
-         if(checked!=4&&iban.length!=23){
+         if(checked!=4&&iban.trim()&&iban.length!=23){
           showToast("Please ensure that the IBAN number provided contains exactly 23 characters.")
           return
          }
@@ -238,7 +239,9 @@ const Commission2=({ navigation, route })=> {
               value={iban}
               onChangeText={(text) => {
                 if (text?.length < 24) {
-                    setiban(text.replace(/\s/g, ''))}}
+                  
+                    setiban(text.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, ''))
+                  }}
                 }
                
             />
