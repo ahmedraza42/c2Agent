@@ -84,7 +84,7 @@ const DrawerContentForBuyer=({})=> {
                       try {
                         if (item.title === "Contact Us") {
                           Linking.openURL(
-                            `whatsapp://send?phone=${"971502258431"}&text=${"Hello!!"}`
+                            `whatsapp://send?phone=${"971502258431"}&text=${"Hello! I have a question regarding the app. Could you please provide some assistance? Thank you!"}`
                           );
                         } 
                         else if (item.title === "Logout") {
