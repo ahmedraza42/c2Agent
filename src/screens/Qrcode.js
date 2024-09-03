@@ -11,21 +11,39 @@ import { getItemFromStorage } from "../utils/storage";
 import { SvgUri } from 'react-native-svg';
 import ViewShot, { captureScreen } from "react-native-view-shot";
 import Share from "react-native-share";
+import Retry from "../components/Retry";
 const Qrcode = ({ navigation }) => {
   let ref = useRef("viewShot");
   const [qr, setQr] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getDataFromAsync()
   }, []);
 
   const getDataFromAsync=async()=>{
+    setError(null)
+    setLoading(true)
     const res= await getItemFromStorage('qrcode')
     console.log({res})
     setQr(res)
+    await getPayment()
     setLoading(false)
   }
+
+  const getPayment = async () => {
+    try {
+      const response = await API_CALLS.leaderboard();
+      console.log("leaderboard", response);
+      if (response.status === true) {
+      
+      }
+    } catch (error) {
+      console.log("getPaymentMethods error", error);
+      setError('fd')
+    }
+  };
   const shareSS = async () => {
    
     try {
@@ -85,6 +103,12 @@ const Qrcode = ({ navigation }) => {
 
   </View>
  )}
+
+ if(error){
+  return(
+    <Retry  onPress={()=>getDataFromAsync()}/>
+  )
+}
   return (
     <View style={styles.container}>
       {renderHeader()}

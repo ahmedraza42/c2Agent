@@ -80,7 +80,7 @@ const Login = ({ navigation, route }) => {
         }
       
   };
-
+console.log({phoneNumber})
   const handleLogin = async () => {
     Keyboard.dismiss();
     if (phoneInput?.current) {
@@ -230,6 +230,8 @@ const Login = ({ navigation, route }) => {
             <TouchableOpacity onPress={() => {
               setPassword('')
               setPhoneNumber('')
+              setFormattedValue('')
+              phoneInput.current.setState({number:''})
               navigation.navigate("Signup")}}>
               <Text style={styles.clickableText}>Sign Up</Text>
             </TouchableOpacity>

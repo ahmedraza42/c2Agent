@@ -16,17 +16,20 @@ import { RadioButton } from "react-native-paper";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
 import { showToast } from "../components/Toast";
+import Retry from "../components/Retry";
 
 const LeaderBoard = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = React.useState([]);
   const [checked, setChecked] = React.useState(null);
   const [commission, setCommission] = React.useState([]);
+  const [error, setError] = useState(null);
   useEffect(() => {
     callHomeApis();
   }, []);
 
   const callHomeApis = async () => {
+    setError(null)
     setLoading(true);
     //  await getPopularProducts()
     await getPayment();
@@ -42,6 +45,7 @@ const LeaderBoard = ({ navigation, route }) => {
       }
     } catch (error) {
       console.log("getPaymentMethods error", error);
+      setError('fd')
     }
   };
 
@@ -80,6 +84,11 @@ const LeaderBoard = ({ navigation, route }) => {
   };
   if (loading) {
     return <Loader />;
+  }
+  if(error){
+    return(
+      <Retry  onPress={()=>callHomeApis()}/>
+    )
   }
   return (
     <View style={styles.container}>

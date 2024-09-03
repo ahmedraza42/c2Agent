@@ -9,7 +9,7 @@ import colors from '../theme/Colors';
 const Retry = ({isLoading, onPress, error}) => {
   const {colors} = useTheme();
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'white'}}>
       <Text
         style={{
           marginTop: moderateScale(10),
