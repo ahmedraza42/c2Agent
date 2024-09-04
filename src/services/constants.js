@@ -38,6 +38,7 @@ export const API_URLS = {
   getFavorite: `${BASE_URL}/favorites`,
   search: `${BASE_URL}/search`,
   suggestion: `${BASE_URL}/suggestion/`,
+  get_cities: `${BASE_URL}/get_cities/`,
   
 
  
@@ -62,6 +63,7 @@ const updateBankDetails = (data) => post(API_URLS.updateBankDetails,data);
 const earningDashboard = (data) => get(API_URLS.earningDashboard);
 const referalMerchant = (data) => get(API_URLS.referalMerchant);
 const leaderboard = (data) => get(API_URLS.leaderboard);
+const get_cities = (data) => get(API_URLS.get_cities+data);
 
 const getUserProfile = (data) => post(API_URLS.getUserProfile, data);
 const popularProducts = (data) => get(API_URLS.popularProducts+data);
@@ -99,6 +101,7 @@ const API_CALLS = {
   updateBankDetails,
   earningDashboard,
   referalMerchant,
-  leaderboard
+  leaderboard,
+  get_cities
 };
 export default API_CALLS;

@@ -29,8 +29,8 @@ import { showToast } from "../components/Toast";
 import { ModalContext } from "../context/ModalContext";
 import { isEmpty } from "lodash";
 const ProfileMerchantt = ({ navigation, route }) => {
-  let emiratesData = route.params.emiratesData || {};
-  let drivingLisenceData = route.params.drivingLisenceData || {};
+  let emiratesData = route.params?.emiratesData || {};
+  let drivingLisenceData = route.params?.drivingLisenceData || {};
 console.log({emiratesData})
 console.log({drivingLisenceData})
   let arr = [];
@@ -70,12 +70,24 @@ console.log({drivingLisenceData})
         setSegment(response?.merchant?.segments || []);
         setsubSegment(response?.merchant?.subSegments || []);
         setCountry(response?.country || []);
-        setCity(response?.city || []);
+        // setCity(response?.city || []);
       }
     } catch (error) {
       console.log("user profile error", error);
     }
   };
+  const getCityByCountryID = async (id) => {
+    try {
+      const response = await API_CALLS.get_cities(id);
+      console.log({response})
+      if (response.status === true) {
+        setCity(response?.data || []);
+      }
+    } catch (error) {
+      console.log("user profile error", error);
+    }
+  };
+
   const addMerchant = async () => {
     Keyboard.dismiss();
     if (name === "") {
@@ -204,13 +216,14 @@ console.log({drivingLisenceData})
               <Dropdown
                 data={country}
                 onSelect={(item, index) => {
+                  getCityByCountryID(item.id)
                   setSelectedCountry(item.id);
                 }}
               />
             </View>
             {/* <View style={{width:moderateScale(15)}}/> */}
           </View>
-          <View style={{ flex: 1 }}>
+         {city.length>0&& <View style={{ flex: 1 }}>
             <Text style={styles.emailPassword}>City</Text>
             <Dropdown
               data={city}
@@ -230,7 +243,7 @@ console.log({drivingLisenceData})
                 }
               }}
             />
-          </View>
+          </View>}
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
             {selectedItems.map((item, index) => {
               return (
