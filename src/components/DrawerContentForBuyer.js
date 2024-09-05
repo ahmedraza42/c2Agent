@@ -18,7 +18,7 @@ import { remove } from '../utils/storage';
 import TokenStorageService from '../services/tokenService';
 import { UserContext } from '../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
-
+import VersionInfo from 'react-native-version-info';
 const _tokenStorageService = TokenStorageService.getService();
 const DrawerContentForBuyer=({})=> {
  const navigation= useNavigation();
@@ -103,6 +103,7 @@ const DrawerContentForBuyer=({})=> {
                 );
               })}
           </View>
+          <Text style={{padding:moderateScale(10),fontFamily:fontFamily.SemiBold,fontSize:moderateScale(14)}}>Version {VersionInfo.appVersion}</Text>
          
         {/* </ScrollView> */}
     </View>

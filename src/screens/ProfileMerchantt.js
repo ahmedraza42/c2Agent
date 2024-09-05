@@ -28,6 +28,7 @@ import { requestLocationPermission } from "../utils/permission";
 import { showToast } from "../components/Toast";
 import { ModalContext } from "../context/ModalContext";
 import { isEmpty } from "lodash";
+import Entypo from "react-native-vector-icons/Entypo";
 const ProfileMerchantt = ({ navigation, route }) => {
   let emiratesData = route.params?.emiratesData || {};
   let drivingLisenceData = route.params?.drivingLisenceData || {};
@@ -101,11 +102,16 @@ console.log({drivingLisenceData})
       return;
     } else {
       setBtnloading(true);
+      let d=[]
+      for(var i=0;i<selectedItems.length;i++){
+     d.push(selectedItems[i].id)
+      }
+      console.log('d',d)
       try {
         let data = {
           name: name || "",
           country_id: selectedCountry,
-          city_id: selectedItemsid,
+          city_id: d,
           emirates_id:emiratesData,
           driving_license:drivingLisenceData
           // emirates_drivingLisence_data:arr,
@@ -233,10 +239,10 @@ console.log({drivingLisenceData})
                 let indexs = copy.indexOf(item.name);
                 console.log({ indexs });
                 if (indexs == -1) {
-                  copy.push(item.name);
-                  copyid.push(item.id);
+                  copy.push(item);
+                  // copyid.push(item.id);
                   setSelectedItems(copy);
-                  setSelectedItemsid(copyid);
+                  // setSelectedItemsid(copyid);
                   setSelectedCity(item.id);
                 } else {
                   showToast("Already Added");
@@ -252,12 +258,47 @@ console.log({drivingLisenceData})
                     padding: moderateScale(5),
                     justifyContent: "center",
                     alignItems: "center",
+                    alignItems:'center',
+                    flexDirection:'row',
                     backgroundColor: "rgba(237, 237, 237, 1)",
                     margin: moderateScale(5),
                     borderRadius: moderateScale(10),
                   }}
                 >
-                  <Text>{item}</Text>
+                <TouchableOpacity
+                onPress={()=>{
+                  let copy = [...selectedItems]
+                  const newArray = copy.filter((item, x) => x !== index);
+                  setSelectedItems(newArray); 
+                  console.log({newArray})
+                  // let copy1 = [...selectedItemsid]
+                  // console.log('copy1',copy1)
+                  // const newArray1 = copy1.filter((item, x) => x !== index);
+                  // console.log('copy2',newArray1)
+                  // selectedItemsid(newArray1); 
+                 
+                //   console.log({copy})
+                //   const indexx = copy.indexOf(item);
+                //   console.log({indexx})
+                //   if (indexx > -1) { // only splice array when item is found
+                   
+                //     let data= copy.slice(indexx,1)
+                //  console.log({data})
+                //  setSelectedItems(data) // 2nd parameter means remove one item only
+                //   }
+                
+                }}
+                 style={{
+                  marginRight:moderateScale(5)
+                }}>
+                <Entypo
+            name={"circle-with-cross"}
+            color={"rgba(0, 0, 0, 0.8)"}
+            size={moderateScale(25)}
+          />
+                </TouchableOpacity>
+                 
+                  <Text>{item.name}</Text>
                 </View>
               );
             })}
