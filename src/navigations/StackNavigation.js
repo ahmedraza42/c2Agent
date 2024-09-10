@@ -327,6 +327,11 @@ export const BottomTabs = (props) => {
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
         name="Qrcode"
         component={Qrcode}
         options={{ headerShown: false }}

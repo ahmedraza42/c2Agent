@@ -27,7 +27,7 @@ const Profile=({navigation,route})=> {
     const phoneInput = useRef(null);
     const [base, setBase] = useState(null);
     const [camera, setCamera] = useState(false);
-    const [accountName, setAccountName] = useState("");
+    const [accountName, setAccountName] = useState(userProfile?.name||'');
     const [phoneNumber, setPhoneNumber] = useState(userProfile?.userPhoneNumber||"");
     const [email, setEmail] = useState("");
     const [countryCode, setCountryCode] = useState(userProfile?.userCountryCode||"AE");
@@ -40,13 +40,29 @@ const Profile=({navigation,route})=> {
     const [isModalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = React.useState(true);
     useEffect(()=>{
-      // getProfile()
+      getProfile()
     },[])
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
-   
+    console.log({userProfile})
     const getProfile = async () => {
+      try {
+        const response = await API_CALLS.getProfile();
+        console.log("getProfile", response);
+        if (response.status === true) {
+          console.log("getProfile", response);
+          setUserProfile((state) => ({
+            ...state,
+            ...response?.data?.user,
+          }));
+        }
+      } catch (error) {
+        console.log("getProfile error", error);
+      }
+    };
+   
+    const getProfilee = async () => {
       try {
         let data={
           id: userCredential.id ,

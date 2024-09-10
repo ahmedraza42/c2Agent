@@ -200,7 +200,7 @@ console.log({phoneNumber})
             />
           </View>
                   <View style={styles.forgotView}/>
-          {/* <View style={styles.forgotView}>
+          <View style={styles.forgotView}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("ForgetPassword");
@@ -208,7 +208,7 @@ console.log({phoneNumber})
             >
               <Text style={styles.forgetPassword}>Forgot password?</Text>
             </TouchableOpacity>
-          </View> */}
+          </View>
 
           <Button
             loading={loading}
@@ -268,7 +268,8 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
   },
   forgotView: {
-    marginVertical: moderateScale(13),
+    marginTop: moderateScale(5),
+    marginBottom: moderateScale(10),
     alignItems: "flex-end",
   },
   top20: {

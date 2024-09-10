@@ -37,6 +37,7 @@ const Input = ({
           keyboardType={keyboardType}
           secureTextEntry={secureTextEntry}
           onSubmitEditing={onSubmitEditing}
+          selection={{start:0, end:0}}
           placeholder={placeholder}
           autoCorrect={false}
           value={value}

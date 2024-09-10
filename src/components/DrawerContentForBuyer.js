@@ -60,9 +60,9 @@ const DrawerContentForBuyer=({})=> {
                 <Text style={styles.firstName}>
                   {!isEmpty(userProfile)? userProfile?.name:'---'}
                 </Text>
-                {/* <TouchableOpacity onPress={() => {navigation.navigate('Profile')}}>
+                <TouchableOpacity onPress={() => {navigation.navigate('Profile')}}>
                   <Text style={styles.email}>Edit Profile</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               
             </View>
 
@@ -230,9 +230,11 @@ const styles = StyleSheet.create({
     },
     firstName: {
       fontFamily: fontFamily.Medium,
-      fontSize: moderateScale(16),
+      fontSize: moderateScale(15),
       color: "#ffff",
       marginTop: moderateScale(5),
+      textAlign:'center',
+      paddingHorizontal:moderateScale(10)
       // width:moderateScale(135)
     },
     email: {

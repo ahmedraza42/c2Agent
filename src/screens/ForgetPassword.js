@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Image, ImageBackground, Keyboard, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Text from "../components/Text";
 import colors from "../theme/Colors";
@@ -9,10 +9,16 @@ import PasswordInput from "../components/PasswordInput";
 import Button from "../components/Button";
 import API_CALLS from "../services/constants";
 import { showToast } from "../components/Toast";
+import PhoneInput from "react-native-phone-number-input";
 
 const ForgetPassword=({ navigation, route })=> {
+  const phoneInput = useRef(null);
   const [email, setEmail] = useState("test21@gmail.com");
   const [isLoading, setIsLoading] = useState(false);
+  const [formattedValue, setFormattedValue] = useState("");
+  const [countryCode, setCountryCode] = useState("AE");
+  const [phoneCode, setPhoneCode] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const forgetPasword = () => {
     // navigation.navigate('ResetPassword')
     // return
@@ -76,14 +82,31 @@ const ForgetPassword=({ navigation, route })=> {
       >
         <Text style={styles.heading}>FORGOT PASSWORD</Text>
         <Text style={styles.goodToSee}>
-          Good to see you! Enter email to reset your password.
+          Good to see you! Enter phone number to reset your password.
         </Text>
         <Text style={styles.emailPassword}>Email Address</Text>
-        <Input
-          placeholder={"Enter Email"}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
+        <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={phoneNumber}
+                  defaultCode={countryCode}
+                  layout="second"
+                  onChangeText={(text) => {
+                    setPhoneNumber(text);
+                  }}
+                  onChangeFormattedText={(text) => {
+                    setFormattedValue(text);
+                  }}
+                  onChangeCountry={(text) => {
+                    console.log(text)
+                    setPhoneCode(text.callingCode[0]);
+                    setCountryCode(text.cca2);
+                  }}
+                  codeTextStyle={styles.codeTextStyle}
+                  containerStyle={styles.phoneInputContainerStyle}
+                  textInputStyle={styles.phoneTextStyle}
+                  textContainerStyle={styles.phoneTextContainerStyle}
+                  countryPickerButtonStyle={styles.countryPickerButtonStyle}
+                />
 
         <View style={styles.top20} />
         <Button
@@ -177,5 +200,38 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
+  },
+  codeTextStyle: {
+    fontFamily: fontFamily.Medium,
+    fontSize: moderateScale(12),
+  },
+  phoneInputContainerStyle: {
+    backgroundColor: 'rgba(237, 237, 237, 1)',
+    height: moderateScale(50),
+    borderRadius: moderateScale(14),
+    paddingHorizontal: moderateScale(7),
+    width: "100%",
+  },
+  phoneTextStyle: {
+    fontFamily: fontFamily.Regular,
+    fontSize: moderateScale(14),
+    alignItems: "center",
+    color: colors.input,
+    height: moderateScale(40),
+   
+    backgroundColor:'rgba(237, 237, 237, 1)',
+  },
+  phoneTextContainerStyle: {
+    alignItems: "center",
+    fontSize: moderateScale(10),
+    color: "black",
+    backgroundColor:'rgba(237, 237, 237, 1)',
+  },
+  countryPickerButtonStyle: {
+    backgroundColor: "rgba(50, 80, 141, 0.2)",
+    width: moderateScale(60),
+    height: moderateScale(30),
+    borderRadius: moderateScale(10),
+    alignSelf: "center",
   },
 });
