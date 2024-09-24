@@ -287,7 +287,7 @@ const Profile=({navigation,route})=> {
             )
           }
         />
-        <View style={styles.top10}>
+        {/* <View style={styles.top10}>
           <Text style={styles.emailPassword}>Email</Text>
           <Input
             placeholder="Enter Email Address"
@@ -295,7 +295,7 @@ const Profile=({navigation,route})=> {
             editable={false}
             onChangeText={(t) => setEmail(t)}
           />
-        </View>
+        </View> */}
         <View style={styles.top10}>
           <Text style={styles.emailPassword}>Phone Number</Text>
           <PhoneInput

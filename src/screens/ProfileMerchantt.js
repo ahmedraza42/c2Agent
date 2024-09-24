@@ -29,6 +29,9 @@ import { showToast } from "../components/Toast";
 import { ModalContext } from "../context/ModalContext";
 import { isEmpty } from "lodash";
 import Entypo from "react-native-vector-icons/Entypo";
+import { remove } from "../utils/storage";
+import TokenStorageService from "../services/tokenService";
+const _tokenStorageService = TokenStorageService.getService();
 const ProfileMerchantt = ({ navigation, route }) => {
   let emiratesData = route.params?.emiratesData || {};
   let drivingLisenceData = route.params?.drivingLisenceData || {};
@@ -148,7 +151,17 @@ console.log({drivingLisenceData})
       setBtnloading(false);
     }
   };
-
+  const logout=async()=>{
+    await remove("current_user");
+    await remove('emirateData')
+    await remove('emirateDataBackend')
+    await remove('drivingData')
+    await remove('drivingDatabackend')
+    await _tokenStorageService.clearToken();
+    setUser((state) => ({
+      isLoggedIn: false,
+    }));
+  }
   return (
     <View style={styles.container}>
       <View style={styles.iconView}>
@@ -175,6 +188,9 @@ console.log({drivingLisenceData})
             source={require("../assets/vectors/backarrow.png")}
           />
         </TouchableOpacity>
+        <TouchableOpacity style={{position:'absolute',top:20,right:20}} onPress={() => logout()}>
+                <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16),color:'white'}}>Logout</Text>
+              </TouchableOpacity>
       </View>
       <View style={styles.container2}>
         <Text style={styles.heading}>COMPLETE YOUR PROFILE</Text>
@@ -224,6 +240,8 @@ console.log({drivingLisenceData})
                 onSelect={(item, index) => {
                   getCityByCountryID(item.id)
                   setSelectedCountry(item.id);
+                  setSelectedItems([])
+                  setSelectedCity([])
                 }}
               />
             </View>

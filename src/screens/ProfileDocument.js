@@ -27,15 +27,18 @@ import DocumentPicker, {
 import { uploadImage } from "../services/reusableApis";
 import Modal from "react-native-modal";
 import MyCamera from "../components/MyCamera";
-import { getItemFromStorage, saveItemToStorage } from "../utils/storage";
+import { getItemFromStorage, remove, saveItemToStorage } from "../utils/storage";
 import API_CALLS from "../services/constants";
 import { ModalContext } from "../context/ModalContext";
 import { LoaderContext } from "../context/LoaderContext";
 import Input from "../components/Input";
 import { isEmpty } from "lodash";
+import TokenStorageService from "../services/tokenService";
+import { UserContext } from "../context/UserContext";
+const _tokenStorageService = TokenStorageService.getService();
 const ProfileDocument = ({ navigation, route }) => {
   const cameraRef = useRef(null);
-
+  const [user, setUser] = useContext(UserContext);
   const [imageTypeTrade, setImageTypeTrade] = useState("");
   const [baseTrade, setBaseTrade] = useState(null);
   const [imageUriTrade, setImageUriTrade] = useState("");
@@ -378,6 +381,17 @@ const ProfileDocument = ({ navigation, route }) => {
     )})
     
   }
+  const logout=async()=>{
+    await remove("current_user");
+    await remove('emirateData')
+    await remove('emirateDataBackend')
+    await remove('drivingData')
+    await remove('drivingDatabackend')
+    await _tokenStorageService.clearToken();
+    setUser((state) => ({
+      isLoggedIn: false,
+    }));
+  }
   return (
     <View style={styles.container}>
       <View style={styles.iconView}>
@@ -386,6 +400,9 @@ const ProfileDocument = ({ navigation, route }) => {
           style={styles.icon}
           resizeMode="contain"
         />
+         <TouchableOpacity style={{position:'absolute',top:20,right:20}} onPress={() => logout()}>
+                <Text style={{fontFamily:fontFamily.Bold,fontSize:moderateScale(16),color:'white'}}>Logout</Text>
+              </TouchableOpacity>
       </View>
       <View style={styles.container2}>
         {/* <ScrollView
