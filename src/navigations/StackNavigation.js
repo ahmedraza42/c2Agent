@@ -28,7 +28,7 @@ import { moderateScale } from "react-native-size-matters";
 import DrawerContentForBuyer from "../components/DrawerContentForBuyer";
 import ProductDetail from "../screens/ProductDetail";
 import OrderOverview from "../screens/OrderOverview";
-import ShippingAddress from "../screens/ShippingAddress";
+import ShippingAddress from "../screens/CheckMerchantStatus";
 import NewAddress from "../screens/NewAddress";
 import PastOrders from "../screens/PastOrders";
 import OrderStatus from "../screens/OrderStatus";
@@ -44,6 +44,7 @@ import Earnings from "../screens/Earnings";
 import Dashboard from "../screens/Dashboard";
 import ReferQr from "../screens/ReferQr";
 import LeaderBoard from "../screens/LeaderBoard";
+import CheckMerchantStatus from "../screens/CheckMerchantStatus";
 const DrawerBuyer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -95,8 +96,8 @@ export const MainManteeStack = () => {
       />
 
       <DrawerBuyer.Screen
-        name="ShippingAddress"
-        component={ShippingAddress}
+        name="CheckMerchantStatus"
+        component={CheckMerchantStatus}
         options={{ headerTitle: () => headerTitle(""), unmountOnBlur: true }}
       />
       <DrawerBuyer.Screen
@@ -324,6 +325,11 @@ export const BottomTabs = (props) => {
       <HomeStack.Screen
         name="ReferQr"
         component={ReferQr}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="CheckMerchantStatus"
+        component={CheckMerchantStatus}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen

@@ -147,7 +147,9 @@ const Qrcode = ({ navigation }) => {
             }}
           />
       </View>
-     
+     <TouchableOpacity style={{}} onPress={()=>{navigation.navigate('CheckMerchantStatus')}}>
+      <Image style={{width:'90%',alignSelf:'center'}} resizeMode="contain" source={require('../assets/drawerBuyerAssets/merchantStatus.png')}/>
+     </TouchableOpacity>
     </View>
   );
 };

@@ -76,11 +76,11 @@ export const drawerBuyerList = [
   //   image: require("../assets/drawerBuyerAssets/address.png"),
   //   route: "ShippingAddress",
   // },
-  // {
-  //   title: "Scratch Card",
-  //   image: require("../assets/drawerBuyerAssets/address.png"),
-  //   route: "ScratchCardPage",
-  // },
+  {
+    title: "Check Merchant Status",
+    image: require("../assets/drawerBuyerAssets/address.png"),
+    route: "CheckMerchantStatus",
+  },
   {
     title: "Contact Us",
     image: require("../assets/drawerBuyerAssets/contactus.png"),
