@@ -39,6 +39,7 @@ export const API_URLS = {
   search: `${BASE_URL}/search`,
   suggestion: `${BASE_URL}/suggestion/`,
   get_cities: `${BASE_URL}/get_cities/`,
+  scanMerchant: `${BASE_URL}/scan_merchant_shop`,
   
 
  
@@ -64,6 +65,7 @@ const earningDashboard = (data) => get(API_URLS.earningDashboard);
 const referalMerchant = (data) => get(API_URLS.referalMerchant);
 const leaderboard = (data) => get(API_URLS.leaderboard);
 const get_cities = (data) => get(API_URLS.get_cities+data);
+const scanMerchant = (data) => post(API_URLS.scanMerchant,data);
 
 const getUserProfile = (data) => post(API_URLS.getUserProfile, data);
 const popularProducts = (data) => get(API_URLS.popularProducts+data);
@@ -102,6 +104,7 @@ const API_CALLS = {
   earningDashboard,
   referalMerchant,
   leaderboard,
-  get_cities
+  get_cities,
+  scanMerchant
 };
 export default API_CALLS;

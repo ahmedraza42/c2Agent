@@ -27,10 +27,16 @@ const CheckMerchantStatus = ({ navigation, route }) => {
   const [_, setModal] = useContext(LoaderContext);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible2, setModalVisible2] = useState(false);
   const [camera, setCamera] = useState(false);
+  const [shopname, setShopname] = useState('');
+  const [shopAlreadyExist, setShopAlreadyExist] = useState(false);
   useEffect(() => {}, []);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+  const toggleModal2 = () => {
+    setModalVisible2(!isModalVisible2);
   };
   const openImagePicker = () => {
     ImagePicker.openPicker({
@@ -47,8 +53,12 @@ const CheckMerchantStatus = ({ navigation, route }) => {
   };
   const sendImageFrontToBackend=async(base,uri,file,type)=>{
     console.log({base})
-    let data =
-    base
+    var dataa = new FormData();
+      dataa.append("image", {
+        uri: uri,
+        type: type,
+        name: file,
+      });
     // JSON.stringify(base)
     try {
       setCamera(false);
@@ -57,14 +67,26 @@ const CheckMerchantStatus = ({ navigation, route }) => {
         heading: "Processing, Please wait",
         visible: true,
         }));
-      const res =await API_CALLS.emiratesFront(data)
-     
-      if(!isEmpty(res.data)){
-        let arr = []; 
-        setCamera(false);
+      const res =await API_CALLS.scanMerchant(dataa)
+     console.log({res})
+     setModal((state) => ({
+      ...state,
+      visible: false,
+      }));
+      if(res.status==true){
+        console.log('sdsds')
+        setShopname(res.message)
+        setShopAlreadyExist(true)
+        toggleModal2()
       }
       else{
-      //  showToast('Emirates ID image is not valid please upload proper image')
+        setModal((state) => ({
+          ...state,
+          visible: false,
+          }));
+          setShopAlreadyExist(false)
+          setShopname(res?.message)
+          toggleModal2()
       }
      
      
@@ -183,6 +205,69 @@ const CheckMerchantStatus = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </Modal>
+
+      <Modal
+        animationIn={"fadeIn"}
+        isVisible={isModalVisible2}
+        animationInTiming={300}
+        onBackdropPress={() => toggleModal2()}
+        backdropOpacity={0.7}
+      >
+        <View style={{...styles.modalInnerView,justifyContent:'center',alignItems:'center'}}>
+         
+        
+         {shopAlreadyExist==false ?
+         <>
+         <Text
+            style={styles.subText}
+          >
+            Proceed with the onboarding of
+          </Text>
+          <Text
+            style={styles.subText}
+          >
+          {shopname}
+          </Text>
+         </>
+         :
+         <>
+         <Text
+            style={styles.subText2}
+          >
+            {shopname}
+          </Text>
+          <Text
+            style={styles.subText}
+          >
+          {shopname}
+          </Text>
+         </>
+         }
+         
+          <View style={{ marginVertical: moderateScale(5), width: "100%" }}>
+            <Button
+              // loading={loading}
+              text={"PROCEED"}
+              onPress={() => {
+                toggleModal2();
+                navigation.goBack()
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              toggleModal2();
+              navigation.navigate("Homes");
+            }}
+          >
+            <Text
+              style={styles.returnToHome}
+            >
+              Return To Home
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
     
   );
@@ -234,4 +319,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.input,
     borderRadius: moderateScale(5),
   },
+  checkCircleImage:{
+    width: moderateScale(60), height: moderateScale(60)
+  },
+  doneText:{
+    fontFamily: fontFamily.Bold,
+    fontSize: moderateScale(17),
+    marginTop: moderateScale(10),
+  },
+  subText:{
+    fontFamily: fontFamily.Medium,
+    fontSize: moderateScale(14),
+    marginVertical: moderateScale(5),
+    textAlign:'center'
+  },
+  subText2:{
+    fontFamily: fontFamily.Bold,
+    fontSize: moderateScale(14),
+    marginVertical: moderateScale(5),
+    color:colors.primary,
+    textAlign:'center'
+  },
+  returnToHome:{
+    fontFamily: fontFamily.Medium,
+                fontSize: moderateScale(16),
+                marginTop: moderateScale(5),
+                color: colors.primary,
+  }
 });

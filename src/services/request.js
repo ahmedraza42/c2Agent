@@ -125,7 +125,7 @@ export const getApiRequestHeader = async url => {
 // update headers if it is not found
 export const updateHeaders = async url => {
   // const header = await getApiRequestHeader(url);
-  if(url.includes('api/v1/ocr') || url.includes('upload/update-user-pfp')){    console.log('multipart')
+  if(url.includes('api/v1/ocr') || url.includes('upload/update-user-pfp') || url.includes('api/v1/scan_merchant_shop')){    console.log('multipart')
     instance.defaults.headers = { 
       'Content-Type': 'multipart/form-data',
       // 'IsReceivedFromMobile':true
