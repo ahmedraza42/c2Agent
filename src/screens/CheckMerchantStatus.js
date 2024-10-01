@@ -52,7 +52,9 @@ const CheckMerchantStatus = ({ navigation, route }) => {
     });
   };
   const sendImageFrontToBackend=async(base,uri,file,type)=>{
-    console.log({base})
+    console.log({uri})
+    console.log({file})
+    console.log({type})
     var dataa = new FormData();
       dataa.append("image", {
         uri: uri,
@@ -107,7 +109,7 @@ const CheckMerchantStatus = ({ navigation, route }) => {
       const options = { quality: 1, base64: true };
       const data = await cameraRef?.current.takePictureAsync(options);
         const fileName = data.uri.split("/").pop();
-        sendImageFrontToBackend(data.base64,data.uri,fileName,"image/jpg")
+        sendImageFrontToBackend(data.base64,data.uri,fileName,"image/jpeg")
     }
   };
   if (camera) {
@@ -224,7 +226,7 @@ const CheckMerchantStatus = ({ navigation, route }) => {
             Proceed with the onboarding of
           </Text>
           <Text
-            style={styles.subText}
+            style={{...styles.subText,color:colors.primary,fontFamily:fontFamily.SemiBold,fontSize:moderateScale(16)}}
           >
           {shopname}
           </Text>

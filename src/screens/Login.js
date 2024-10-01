@@ -199,7 +199,7 @@ console.log({phoneNumber})
               changeText={(text) => setPassword(text)}
             />
           </View>
-                  <View style={styles.forgotView}/>
+                  {/* <View style={styles.forgotView}/>
           <View style={styles.forgotView}>
             <TouchableOpacity
               onPress={() => {
@@ -208,7 +208,7 @@ console.log({phoneNumber})
             >
               <Text style={styles.forgetPassword}>Forgot password?</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <Button
             loading={loading}

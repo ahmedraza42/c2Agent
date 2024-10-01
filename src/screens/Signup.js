@@ -33,6 +33,7 @@ import SelectDropdown from "react-native-select-dropdown";
 const Signup = ({ navigation, route }) => {
   const phoneInput = useRef(null);
   const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
   const [email, setEmail] = useState("test21@test.com");
   const [loading, setLoading] = useState(false);
   const [formattedValue, setFormattedValue] = useState("");
@@ -103,6 +104,10 @@ const Signup = ({ navigation, route }) => {
       showToast(
         "Must contain atleast one number , uppercase and lowercase letter and 8 characters long"
       );
+      return;
+    }
+    else if (password!==cpassword ) {
+      showToast('Confirm password does not match');
       return;
     }
     doSIgnup();
@@ -198,6 +203,14 @@ const Signup = ({ navigation, route }) => {
               placeholder="*********"
               value={password}
               changeText={(text) => setPassword(text)}
+            />
+          </View>
+          <View style={styles.top10}>
+            <Text style={styles.emailPassword}>Confirm Password</Text>
+            <PasswordInput
+              placeholder="*********"
+              value={cpassword}
+              changeText={(text) => setCPassword(text)}
             />
           </View>
 
