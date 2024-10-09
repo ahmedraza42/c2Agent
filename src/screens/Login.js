@@ -199,8 +199,8 @@ console.log({phoneNumber})
               changeText={(text) => setPassword(text)}
             />
           </View>
-                  {/* <View style={styles.forgotView}/>
-          <View style={styles.forgotView}>
+                  <View style={styles.forgotView}/>
+          {/* <View style={styles.forgotView}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("ForgetPassword");

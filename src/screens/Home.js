@@ -90,7 +90,7 @@ const Home = ({ navigation, route }) => {
             <Text
               style={styles.profileName}
             >
-              {!isEmpty(userProfile) ? userProfile?.name : "---"}
+              {!isEmpty(userProfile) ? userProfile?.name : "dsfuds sddsfsd fds dsf sdf dsf sd fsdfdssd ffdsfsd"}
             </Text>
           </View>
         </View>
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
   fontFamily: fontFamily.Medium,
   color: "rgba(21, 21, 21, 0.4)",
   fontSize: moderateScale(15),
+  width:moderateScale(280),
  },
   top10: {
     marginTop: moderateScale(10),

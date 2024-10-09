@@ -238,6 +238,7 @@ console.log({drivingLisenceData})
               <Dropdown
                 data={country}
                 onSelect={(item, index) => {
+                  setCity([])
                   getCityByCountryID(item.id)
                   setSelectedCountry(item.id);
                   setSelectedItems([])
