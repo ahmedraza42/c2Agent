@@ -212,7 +212,7 @@ const CheckMerchantStatus = ({ navigation, route }) => {
 
       <Modal
         animationIn={"fadeIn"}
-        isVisible={!isModalVisible2}
+        isVisible={isModalVisible2}
         animationInTiming={300}
         onBackdropPress={() => toggleModal2()}
         backdropOpacity={0.7}
