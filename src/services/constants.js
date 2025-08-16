@@ -1,9 +1,9 @@
 import { get, post } from "./request";
 
 let liveapi = `https://api.mentoga.com/api`; //live
-let staggingapi = `https://colonyfoods.ae/c2-app/public/api/v1`; //stagging
+let staggingapi = `https://api.mplace.ae/api/v1`; //stagging
 
-let liveimg = `https://api.mentoga.com`; //live
+let liveimg = `https://api.mentoga.com`; //lived
 let staggingimg = `https://stgapiv2.mentoga.com`; //stagging
 
 export const BASE_URL = staggingapi; //staging
